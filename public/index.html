@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Atelier — CS2 Market</title>
+    <meta
+      name="description"
+      content="Your private CS2 market tracker and wishlist."
+    />
+    <link rel="icon" href="/favicon.svg" />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <aside>
+      <a class="brand" href="/" aria-label="Atelier home"
+        ><span class="logo">a</span>atelier<span class="edition">CS2</span></a
+      >
+      <div class="nav-label">YOUR SPACE</div>
+      <nav>
+        <button class="nav active" data-view="all">
+          <span>◈</span> Market <span class="nav-end">⌘</span></button
+        ><button class="nav" data-view="wishlist">
+          <span>♡</span> Wishlist <span id="wish-count" class="badge">0</span>
+        </button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="local-icon">⌁</div>
+        <strong>A space of your own.</strong>
+        <p>Saved on this computer.<br />Always yours to keep.</p>
+        <button id="backup" class="text-button">Export your data</button>
+      </div>
+    </aside>
+    <main>
+      <header>
+        <div class="breadcrumb">
+          Your workspace <span>/</span> <b id="crumb">Market</b>
+        </div>
+        <div class="connection">
+          <i id="status-dot"></i><span id="status">Connecting</span>
+        </div>
+      </header>
+      <section class="heading">
+        <div>
+          <div class="eyebrow">COUNTER-STRIKE 2</div>
+          <h1 id="title">A market. In focus.</h1>
+          <p id="subtitle">
+            Find your next favorite. Keep an eye on the price.
+          </p>
+        </div>
+        <button class="button" id="refresh">
+          <span>↻</span> Refresh prices
+        </button>
+      </section>
+      <div id="notice" role="status" hidden></div>
+      <section class="overview">
+        <div>
+          <span class="metric-label">Items on your wishlist</span
+          ><strong id="saved">0<span>items</span></strong
+          ><small>A collection worth watching</small>
+        </div>
+        <div>
+          <span class="metric-label">Wishlist total <em>USD</em></span
+          ><strong id="total">$0.00</strong
+          ><small id="total-caption">Current lowest listings</small>
+        </div>
+        <div>
+          <span class="metric-label">At your target</span
+          ><strong id="targets">0<span>items</span></strong
+          ><small id="target-caption"
+            >Good things come to those who watch</small
+          >
+        </div>
+        <div class="sync-card">
+          <span class="metric-label"
+            ><i class="mini-dot"></i> Automatic updates</span
+          ><strong>Always in the loop.</strong
+          ><small id="sync-caption"
+            >Refreshes every 5 minutes while running</small
+          >
+          <div class="sync-line"><span></span></div>
+        </div>
+      </section>
+      <section class="market">
+        <div class="market-head">
+          <div>
+            <h2 id="table-title">Explore the market</h2>
+            <span id="results-count">Loading prices…</span>
+          </div>
+          <div class="tools">
+            <label class="search"
+              ><span>⌕</span
+              ><input
+                id="search"
+                type="search"
+                placeholder="Search skins, cases, stickers…"
+                aria-label="Search market"
+              /><kbd>/</kbd></label
+            ><select id="sort" aria-label="Sort items">
+              <option value="popular">Most available</option>
+              <option value="low">Price: low to high</option>
+              <option value="high">Price: high to low</option>
+            </select>
+          </div>
+        </div>
+        <div class="filters" id="filters">
+          <button class="chip selected" data-category="all">All items</button
+          ><button class="chip" data-category="rifles">Rifles & snipers</button
+          ><button class="chip" data-category="knives">Knives</button
+          ><button class="chip" data-category="containers">
+            Cases & capsules
+          </button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ITEM</th>
+                <th>LOWEST PRICE</th>
+                <th>AVAILABLE</th>
+                <th>YOUR TARGET</th>
+                <th><span class="sr-only">Wishlist</span></th>
+              </tr>
+            </thead>
+            <tbody id="items"></tbody>
+          </table>
+        </div>
+        <div id="empty" hidden></div>
+        <button id="more" class="text-button" hidden>Show more items</button>
+      </section>
+      <footer>
+        <span
+          >Prices from
+          <a href="https://skinport.com" target="_blank" rel="noreferrer"
+            >Skinport</a
+          >
+          · USD · Lowest tradable listings</span
+        ><span id="updated">Waiting for first update</span>
+      </footer>
+    </main>
+    <dialog id="detail">
+      <button id="close-detail" class="close" aria-label="Close item">×</button>
+      <div id="detail-body"></div>
+    </dialog>
+    <div id="toast" role="status"></div>
+    <script src="/app.js" defer></script>
+  </body>
+</html>
