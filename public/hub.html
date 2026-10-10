@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>CSKit — Your CS2 Hub</title>
+    <title>CSKit — Counter-Strike 2 Hub, Skins & Loadout Tools</title>
     <meta
       name="description"
-      content="Your CS2 home. Follow the market, collect favorites, and refine your setup."
+      content="Your all-in-one Counter-Strike hub. Track CS2 skin prices, save a wishlist, and build your crosshair, viewmodel and config with Loadout Studio."
     />
     <link rel="canonical" href="https://cskit.site/" />
     <meta property="og:site_name" content="CSKit" />
@@ -18,19 +18,41 @@
       content="Track the market. Build your loadout. Make it yours."
     />
     <meta property="og:url" content="https://cskit.site/" />
-    <meta name="theme-color" content="#f7f8fa" />
-    <link rel="icon" href="/favicon.svg" />
+    <meta name="theme-color" content="#0c0e11" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <link rel="stylesheet" href="/style.css" />
     <link rel="stylesheet" href="/hub.css" />
+    <link rel="stylesheet" href="/theme.css" />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:image:alt"
+      content="CSKit Counter-Strike market, wishlist and Loadout Studio"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "CSKit",
+        "alternateName": "CSKit.site",
+        "url": "https://cskit.site/",
+        "description": "Counter-Strike 2 market tracker, wishlist and Loadout Studio.",
+        "publisher": {
+          "@type": "Organization",
+          "name": "CSKit",
+          "url": "https://cskit.site/",
+          "logo": "https://cskit.site/cskit-icon-dark.png"
+        }
+      }
+    </script>
   </head>
   <body class="hub-page">
     <aside>
       <a class="brand" href="/" aria-label="CSKit home"
-        ><span class="logo" aria-hidden="true">⌘</span>CSKit<span
-          class="edition"
-          >HUB</span
-        ></a
-      >
+        ><img src="/cskit-wordmark.png" width="174" height="58" alt="CSKit"
+      /></a>
       <div class="nav-label">YOUR SPACE</div>
       <nav>
         <a class="nav active" href="/" aria-current="page"
@@ -56,19 +78,38 @@
           Your workspace <span>/</span> <b>Overview</b>
         </div>
         <span class="hub-status" id="hub-status">Opening your hub…</span>
+        <button
+          class="account-control"
+          id="account-control"
+          aria-label="Open account"
+        >
+          <span class="profile-photo" aria-hidden="true"
+            ><svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.7"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="8" r="3.5" />
+              <path d="M5 21v-2a7 7 0 0 1 14 0v2" /></svg></span
+          ><span class="account-control-label">Sign in</span>
+        </button>
       </header>
       <section class="heading">
         <div>
           <div class="eyebrow">THE COUNTER-STRIKE WORKSPACE</div>
-          <h1 id="greeting">Your game. All together.</h1>
-          <p>A home for your favorites, your setup, and what comes next.</p>
+          <h1 id="greeting">Your Counter-Strike hub.</h1>
+          <p>
+            One toolkit for your skins, your setup, and your next step in CS2.
+          </p>
         </div>
       </section>
       <div id="hub-error" class="hub-notice" role="alert" hidden></div>
       <section class="hub-hero">
         <div class="hero-copy">
           <span class="eyebrow">CSKIT · CS2 HUB</span>
-          <h2>A little more<br />in your element.</h2>
+          <h2>Every round.<br />More your own.</h2>
           <p>
             Find something worth watching.<br />Build a setup that feels like
             you.<br />Keep it all in one place.
@@ -150,6 +191,15 @@
             <strong id="build-count">—</strong><span>personal builds</span>
           </div></a
         >
+        <article class="hub-tool wip-tool" aria-disabled="true">
+          <span class="tool-symbol">▥</span><span class="wip-badge">WIP</span>
+          <h3>Leetify score checker</h3>
+          <p>
+            Planned: a place to check your rating and recent performance. In
+            development — not available yet.
+          </p>
+          <div class="tool-foot"><span>COMING TO YOUR TOOLKIT</span></div>
+        </article>
       </section>
       <section class="hub-bottom">
         <div>
@@ -163,7 +213,7 @@
         <button class="button" id="hub-export">Export my data</button>
       </section>
       <footer>
-        <span>CSKit · A considered space for Counter-Strike.</span
+        <span>CSKit · An independent Counter-Strike toolkit.</span
         ><span>Market · Wishlist · Loadout Studio</span>
       </footer>
     </main>

@@ -1,0 +1,464 @@
+:root {
+  color-scheme: dark;
+  color: #f3f4f6;
+  background: #0c0e11;
+  --accent: #ff780f;
+  --panel: #15181d;
+  --line: #2b3038;
+}
+body,
+.studio-page {
+  background: #0c0e11;
+  color: #f3f4f6;
+}
+aside {
+  background: #101216;
+  border-color: var(--line);
+}
+.brand img {
+  width: 174px;
+  height: 58px;
+  object-fit: contain;
+}
+.brand {
+  min-height: 58px;
+}
+header {
+  gap: 18px;
+}
+.breadcrumb {
+  margin-right: auto;
+}
+.breadcrumb b,
+.item-name,
+.price,
+.detail-title,
+.detail-price,
+.overview strong,
+.sidebar-bottom strong {
+  color: #f1f3f5;
+}
+.nav {
+  color: #a7adb7;
+}
+.nav:hover,
+.nav.active {
+  background: #23272e;
+  color: #fff;
+}
+.nav.active {
+  box-shadow: inset 3px 0 var(--accent);
+}
+.eyebrow {
+  color: #f29a5a;
+}
+.nav-label,
+.sidebar-bottom,
+.heading p,
+.hub-page .heading p,
+.hub-status,
+.breadcrumb,
+.connection,
+.metric-label,
+.overview small,
+.item-meta,
+.target,
+.detail-muted,
+.account-note,
+.account-link small,
+.hub-section-heading span,
+.hub-bottom p,
+.hub-tool p,
+.account-intro p,
+.hero-copy p {
+  color: #a8afb9;
+}
+.hub-hero {
+  background:
+    radial-gradient(ellipse at 85% 30%, #65321966, transparent 62%),
+    linear-gradient(120deg, #1c1f25, #15181d);
+  border-color: #3b3029;
+}
+.hero-orbit,
+.hero-orbit:after {
+  border-color: #95633e;
+}
+.hero-caption,
+.art-label,
+.art-label b {
+  color: #b8a797;
+}
+.hero-art img {
+  filter: drop-shadow(0 30px 19px #0008);
+}
+.hub-account,
+.hub-tool,
+.overview,
+.market,
+.editor-panel,
+.preview-panel,
+.studio-toolbar,
+.profile-name-card,
+.dpi-card,
+.pro-card,
+.clean-start,
+.review-metrics,
+.studio-explainer,
+.advanced-settings,
+.preview-summary,
+.command-peek,
+.diff-list details,
+dialog {
+  background: var(--panel);
+  color: #f3f4f6;
+  border-color: var(--line);
+}
+.hub-account {
+  border-color: #59402b;
+  box-shadow: 0 10px 40px #0002;
+}
+.hub-tools {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.hub-tool:hover {
+  border-color: #78502e;
+}
+.tool-foot,
+footer,
+.step-heading,
+.step-footer,
+.setting,
+.preview-readout,
+.preview-options,
+.market-head,
+.filters {
+  border-color: var(--line);
+}
+.button,
+.studio-page .button,
+.google-button,
+.search,
+select,
+input:not([type="range"]):not([type="checkbox"]):not([type="color"]),
+textarea,
+.studio-page textarea,
+.option-pill,
+.chip,
+.preview-options select,
+.setting-control select,
+.setting-number,
+.bind-add select {
+  background: #20242b;
+  color: #e8ebef;
+  border-color: #373d46;
+}
+.button:hover,
+.google-button:hover,
+.option-pill:hover,
+.chip:hover {
+  background: #2c323b;
+}
+.primary,
+.studio-page .primary {
+  background: #ff780f;
+  color: #171009;
+  border: 1px solid #ff923d;
+  box-shadow: 0 4px 16px #e66a001c;
+}
+.primary:hover {
+  background: #ff943f;
+}
+.text-button,
+.account-actions a,
+.detail-actions a,
+.studio-page footer a {
+  color: #ffa568;
+}
+.chip.selected,
+.step-nav button[aria-current],
+.pro-card.chosen {
+  background: #452b1c;
+  color: #ffc18f;
+  border-color: #9a5d2e;
+}
+.step-nav button {
+  color: #a8afb9;
+}
+.step-nav button[aria-current] span,
+.progress-track > span {
+  background: #ff780f;
+  color: #15100c;
+}
+.progress-track,
+.badge,
+.tiny-badge,
+.approx-badge,
+.account-avatar,
+.tool-symbol,
+.wishlist-tool .tool-symbol,
+.studio-tool .tool-symbol,
+.profile-symbol,
+.pro-monogram {
+  background: #292d34;
+  color: #ffac70;
+  border-color: #3e4148;
+}
+.profile-symbol {
+  background: #17191d url("/cskit-icon.png") center/contain no-repeat;
+  font-size: 0;
+}
+.item-tile,
+.item-tile.gold,
+.item-tile.pink,
+.detail-stage {
+  background:
+    radial-gradient(ellipse at 50% 40%, #363b4566, transparent 70%), #1c2026;
+  border-color: #343942;
+}
+.heart {
+  background: #252a32;
+  color: #c0c7d2;
+}
+.heart.saved {
+  color: #ff9a54;
+  background: #432b1d;
+}
+.card-label,
+.stage-caption,
+.search input::placeholder {
+  color: #a7aeba;
+}
+.search input {
+  background: transparent !important;
+}
+.search kbd,
+.close {
+  background: #2b3038;
+  color: #d8dce4;
+  border-color: #444b55;
+}
+.chart {
+  background: #1c2026;
+}
+.chart polyline {
+  stroke: #ff943f;
+}
+.hub-notice,
+.studio-notice,
+.bind-warning,
+.validation-list {
+  background: #382a1c;
+  color: #ffd0a5;
+}
+.migration-card {
+  background: #212a32;
+}
+.migration-card p {
+  color: #bcc6d0;
+}
+.studio-info-grid p,
+.setting-help p,
+.profile-name-card p,
+.studio-note,
+.preview-disclaimer,
+.preview-readout small,
+.step-heading p,
+.pro-card p,
+.pro-card small,
+.studio-explainer p,
+.clean-start small,
+.setting-heading .override-toggle,
+.studio-page dialog p,
+.studio-page dialog li {
+  color: #a9b1be;
+}
+.command-peek pre,
+.diff-list code,
+.studio-page dialog code {
+  background: #0c0e11;
+  color: #d3dce8;
+}
+.wip-tool {
+  background: #121419;
+  border-style: dashed;
+  color: #9a9fa9;
+}
+.wip-tool:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: var(--line);
+}
+.wip-tool .tool-symbol {
+  color: #939aa5;
+}
+.wip-badge {
+  position: absolute;
+  right: 24px;
+  top: 28px;
+  font-size: 10px;
+  letter-spacing: 1px;
+  padding: 5px 8px;
+  background: #272b31;
+  border-radius: 5px;
+  color: #b7bec8;
+}
+.account-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  background: #22262d;
+  border: 1px solid #494039;
+  border-radius: 30px;
+  padding: 5px 15px 5px 5px;
+  color: #f5f5f5;
+  font-size: 12px;
+}
+.profile-photo {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #3b2a20;
+  color: #ffae72;
+  font-size: 22px;
+  overflow: hidden;
+}
+.profile-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.account-control:hover {
+  border-color: var(--accent);
+}
+.account-dialog {
+  width: min(440px, calc(100vw - 32px));
+  padding: 32px;
+  border: 1px solid #4d3b2d;
+  border-radius: 24px;
+  box-shadow: 0 30px 100px #000a;
+}
+.account-dialog::backdrop {
+  background: #000a;
+  backdrop-filter: blur(8px);
+}
+.account-dialog .dialog-logo {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+}
+.account-dialog h2 {
+  font-size: 26px;
+  letter-spacing: -0.7px;
+  margin: 18px 0 12px;
+}
+.account-dialog p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #b4bac5;
+}
+.account-dialog button:not(.dialog-dismiss) {
+  width: 100%;
+  margin-top: 10px;
+  padding: 13px;
+}
+.dialog-dismiss {
+  position: absolute;
+  right: 18px;
+  top: 14px;
+  border: 0;
+  background: transparent;
+  color: #aeb4bf;
+  font-size: 24px;
+}
+.account-dialog .dialog-note {
+  font-size: 12px;
+}
+.account-dialog .dialog-error {
+  color: #ffbf8f;
+}
+.account-dialog a {
+  color: #ffac70;
+}
+.account-dialog [hidden] {
+  display: none !important;
+}
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline-color: #ff9b50;
+}
+@media (max-width: 720px) {
+  .brand img {
+    width: 145px;
+    height: 48px;
+  }
+  header {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .account-control {
+    margin-left: auto;
+  }
+  .account-control-label {
+    display: none;
+  }
+  .account-control {
+    padding: 4px;
+  }
+  .hub-status {
+    max-width: 95px;
+  }
+  .hub-tools {
+    grid-template-columns: 1fr;
+  }
+  .hub-page .heading h1 {
+    font-size: 29px;
+  }
+}
+header,
+.studio-page header {
+  border-color: #2b3038;
+}
+.market {
+  background: transparent;
+}
+tbody tr,
+tbody tr:hover {
+  background: #15181d;
+  border-color: #343a44;
+}
+.overview .sync-card {
+  background: #202832;
+}
+.overview > div + div:before {
+  background: #353b44;
+}
+.metric-label em {
+  background: #2c3139;
+  color: #b6bec9;
+}
+#notice {
+  background: #382a1c;
+  color: #e9c5a1;
+}
+.sync-line span {
+  background: #ff8a31;
+}
+.profile-photo svg {
+  width: 20px;
+  height: 20px;
+}
+.studio-page .account-dialog {
+  width: min(440px, calc(100vw - 32px));
+}
+.sidebar-bottom .text-button {
+  display: block;
+  margin: 8px 0;
+}
+.progress-track #progress-fill {
+  background: #ff780f;
+}

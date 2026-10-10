@@ -98,7 +98,7 @@ export async function signIn() {
   const provider = new authSdk.GoogleAuthProvider();
   provider.setCustomParameters({ prompt: "select_account" });
   await authSdk.signInWithPopup(auth, provider);
-  location.assign("/");
+  location.assign(location.pathname + location.hash);
 }
 export async function signOut() {
   await ready;
@@ -124,7 +124,17 @@ async function read(kind) {
 export async function request(url, body) {
   await ready;
   session();
-  if (!account.user) return localRequest(url, body);
+  if (!account.user) {
+    if (
+      body !== undefined &&
+      ["/api/studio", "/api/wishlist"].includes(
+        new URL(url, location.origin).pathname,
+      ) &&
+      !(await ensureWorkspace())
+    )
+      throw Error("Save cancelled. Choose an account or local guest to save.");
+    return localRequest(url, body);
+  }
   const parsed = new URL(url, location.origin),
     kind = parsed.pathname;
   if (kind === "/api/studio") {
@@ -249,3 +259,116 @@ export async function exportBackup() {
   a.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
+
+// One explicit guest choice per tab session; browsing never requires an account.
+let accountPrompt;
+export async function ensureWorkspace() {
+  await ready;
+  session();
+  if (account.user || sessionStorage.getItem("cskit.guest") === "chosen")
+    return true;
+  return openAccount();
+}
+export async function openAccount() {
+  await ready;
+  if (accountPrompt) return accountPrompt;
+  accountPrompt = new Promise((resolve) => {
+    const dialog = document.createElement("dialog");
+    dialog.className = "account-dialog";
+    dialog.setAttribute("aria-labelledby", "account-dialog-title");
+    dialog.innerHTML = `<button class="dialog-dismiss" aria-label="Close account dialog">×</button><img class="dialog-logo" src="/cskit-icon-dark.png" alt="" width="64" height="64"><h2 id="account-dialog-title"></h2><p class="dialog-description"></p><button class="primary dialog-google">Continue with Google</button><button class="button dialog-guest">Continue as local guest</button><p class="dialog-note">Guest saves stay in this browser. Google sign-in keeps your wishlist and loadouts in your account.</p><p class="dialog-error" role="alert" hidden></p>`;
+    const signedIn = !!account.user;
+    dialog.querySelector("h2").textContent = signedIn
+      ? "Your CSKit account"
+      : "Make CSKit your own.";
+    dialog.querySelector(".dialog-description").textContent = signedIn
+      ? account.user.email || account.user.displayName || "Signed in"
+      : "Sign up or sign in with Google in one step, or keep your setup local. Your choice.";
+    const google = dialog.querySelector(".dialog-google");
+    google.textContent = signedIn ? "Sign out" : "Continue with Google";
+    google.disabled = !account.configured || !!account.error;
+    const guest = dialog.querySelector(".dialog-guest");
+    guest.hidden = signedIn || !!account.error;
+    if (signedIn)
+      dialog.querySelector(".dialog-note").textContent =
+        "Your wishlist and loadouts are saved to your account. Local guest data remains separate.";
+    if (account.error || !account.configured) {
+      const error = dialog.querySelector(".dialog-error");
+      error.hidden = false;
+      error.textContent = account.error
+        ? "Account connection unavailable. Reload to retry safely."
+        : "Google sign-in is unavailable here. You can continue locally.";
+    }
+    let accepted = false;
+    guest.onclick = () => {
+      sessionStorage.setItem("cskit.guest", "chosen");
+      accepted = true;
+      dialog.close();
+    };
+    google.onclick = async () => {
+      google.disabled = true;
+      try {
+        await (signedIn ? signOut() : signIn());
+      } catch (e) {
+        const error = dialog.querySelector(".dialog-error");
+        error.hidden = false;
+        error.textContent =
+          e.code === "auth/popup-closed-by-user"
+            ? "Sign-in closed. Try again or continue locally."
+            : "Sign-in could not finish. Please try again.";
+        google.disabled = false;
+      }
+    };
+    dialog.querySelector(".dialog-dismiss").onclick = () => dialog.close();
+    dialog.addEventListener(
+      "close",
+      () => {
+        dialog.remove();
+        accountPrompt = null;
+        resolve(accepted);
+      },
+      { once: true },
+    );
+    document.body.append(dialog);
+    dialog.showModal();
+  });
+  return accountPrompt;
+}
+ready.then(() => {
+  const control = document.querySelector("#account-control");
+  if (!control) return;
+  control.onclick = () => openAccount();
+  const name = account.user?.displayName || "My account";
+  control.querySelector(".account-control-label").textContent = account.user
+    ? name.split(" ")[0]
+    : "Sign in";
+  control.setAttribute(
+    "aria-label",
+    account.user ? `Open account for ${name}` : "Sign up or sign in",
+  );
+  const avatar = control.querySelector(".profile-photo");
+  if (account.user) {
+    avatar.textContent = name.slice(0, 1).toUpperCase();
+    try {
+      const url = new URL(account.user.photoURL);
+      if (
+        url.protocol === "https:" &&
+        url.hostname.endsWith(".googleusercontent.com")
+      ) {
+        const img = document.createElement("img");
+        img.src = url.href;
+        img.alt = "";
+        img.referrerPolicy = "no-referrer";
+        img.onerror = () => {
+          avatar.textContent = name.slice(0, 1).toUpperCase();
+        };
+        avatar.replaceChildren(img);
+      }
+    } catch {}
+  }
+  document
+    .querySelector("#guest-link")
+    ?.addEventListener("click", () =>
+      sessionStorage.setItem("cskit.guest", "chosen"),
+    );
+});

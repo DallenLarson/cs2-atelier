@@ -297,6 +297,14 @@ const server = http.createServer(async (req, res) => {
       }
     }
     const files = {
+      "/site.webmanifest": "site.webmanifest",
+      "/apple-touch-icon.png": "apple-touch-icon.png",
+      "/favicon.png": "favicon.png",
+      "/favicon.ico": "favicon.ico",
+      "/cskit-icon-dark.png": "cskit-icon-dark.png",
+      "/cskit-icon.png": "cskit-icon.png",
+      "/cskit-wordmark.png": "cskit-wordmark.png",
+      "/theme.css": "theme.css",
       "/": "hub.html",
       "/account": "hub.html",
       "/market": "index.html",
@@ -316,16 +324,22 @@ const server = http.createServer(async (req, res) => {
     if (req.method === "GET" && files[url.pathname]) {
       const f = files[url.pathname];
       res.writeHead(200, {
-        "Content-Type": f.endsWith(".js")
-          ? "text/javascript"
-          : f.endsWith(".css")
-            ? "text/css"
-            : f.endsWith(".svg")
-              ? "image/svg+xml"
-              : "text/html",
+        "Content-Type": f.endsWith(".png")
+          ? "image/png"
+          : f.endsWith(".ico")
+            ? "image/x-icon"
+            : f.endsWith(".webmanifest")
+              ? "application/manifest+json"
+              : f.endsWith(".js")
+                ? "text/javascript"
+                : f.endsWith(".css")
+                  ? "text/css"
+                  : f.endsWith(".svg")
+                    ? "image/svg+xml"
+                    : "text/html",
         "Cache-Control": "no-cache",
         "Content-Security-Policy":
-          "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; script-src 'self' https://www.gstatic.com https://apis.google.com; connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firestore.googleapis.com https://www.googleapis.com; frame-src https://*.firebaseapp.com; frame-ancestors 'none'; base-uri 'none'; form-action 'self'",
+          "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' https://*.googleusercontent.com; script-src 'self' https://www.gstatic.com https://apis.google.com; connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firestore.googleapis.com https://www.googleapis.com; frame-src https://*.firebaseapp.com; frame-ancestors 'none'; base-uri 'none'; form-action 'self'",
       });
       return res.end(readFileSync(path.join(root, "public", f)));
     }

@@ -1490,3 +1490,9 @@ dialog[open] {
 .detail-art {
   scale: 1.4;
 }
+
+@media (max-width: 720px) {
+  .market-page aside { flex-wrap: wrap; gap: 14px; }
+  .market-page aside nav { width: 100%; margin-left: 0; gap: 3px; flex-wrap: wrap; }
+  .market-page aside .nav { font-size: 11px; padding: 9px 8px; gap: 4px; white-space: nowrap; }
+}

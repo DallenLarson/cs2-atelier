@@ -1,5 +1,5 @@
 import { artworkUrl } from "./hosted.js";
-import { request, storageLabel, ready } from "./account.js";
+import { request, storageLabel, ready, ensureWorkspace } from "./account.js";
 import {
   REGISTRY,
   REGISTRY_VERSION,
@@ -868,4 +868,5 @@ async function init() {
   }
 }
 await ready;
-init();
+if (await ensureWorkspace()) init();
+else location.assign("/");

@@ -140,3 +140,9 @@ npm test
 [Skinport API](https://docs.skinport.com/items) supplies prices. The [ByMykel CS2 catalog](https://github.com/ByMykel/CSGO-API) maps exact item names to artwork and refreshes daily. Images download from Steam's CDN on demand and stay cached locally.
 
 Guest data stays local. Signed-in wishlists and Studio profiles are saved to Firebase; existing guest data is uploaded only through the explicit migration action. Public catalog and image requests contact the relevant providers. CS2 names and artwork belong to their respective owners. This project is not affiliated with Valve or Skinport.
+
+## CSKit branding and accounts
+
+Charcoal and orange styling uses the supplied CSKit wordmark and icon, including ICO, PNG and Apple touch favicons. The top-right account control displays a Google profile photo when available. New visitors choose Google sign-in or local guest storage before saving a wishlist or opening Studio; browsing the market stays open. Guest choice lasts for the tab session.
+
+The greyed-out Leetify score checker is planned, not functional. See [the roadmap and search readiness notes](docs/ROADMAP.md).
