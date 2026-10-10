@@ -2,13 +2,23 @@
 
 # Atelier
 
-### A quieter way to watch the CS2 market.
+### Your game. All together.
 
-A lightweight, local-first tracker with transparent artwork, a personal wishlist, and automatic price updates.
+A lightweight CS2 Hub with a market tracker, personal wishlist, Loadout Studio, and optional Google accounts through Firebase.
 
-**No accounts · No API keys · No runtime dependencies · Your data stays local**
+**Guest mode · Google sign-in · Private account storage · No build step**
 
 </div>
+
+![Atelier Hub preview](docs/hub-preview.png)
+
+## One workspace for your game
+
+The new overview brings Market, Wishlist, and Loadout Studio together. **Continue with Google** signs in or creates an account without a new password. When Firebase is configured, wishlists and builds are saved to your own Firestore documents. Guest work stays on the local computer.
+
+Existing data is never uploaded automatically: after signing in, use **Bring local data to my account** to copy your guest wishlist and builds. Cloud entries win on duplicates, and local originals remain intact.
+
+See [Firebase setup, storage, and hosting boundaries](docs/FIREBASE.md). This remains a locally served app connected to Firebase, not a publicly hosted multi-user site. New clones run in guest mode until a Firebase web configuration is supplied.
 
 ![Atelier market preview](docs/preview.png)
 
@@ -87,7 +97,7 @@ Your computer must be awake and online for fresh prices. Offline mode retains th
 | `data/artwork.json`  | Artwork catalog                   |
 | `data/images/`       | Cached transparent images         |
 
-The `data/` folder, machine-specific shortcuts, and runtime paths are ignored by Git. The server listens only on `127.0.0.1`. No analytics or cloud account is required.
+The `data/` folder, machine-specific shortcuts, and runtime paths are ignored by Git. The server listens only on `127.0.0.1`. Guest mode requires no account. Signing in uses Firebase Authentication and private Firestore storage; no analytics is loaded.
 
 For a complete backup, stop the app and copy `data/`. Restore by stopping the app and replacing that folder with your backup. **Export your data** downloads wishlist, history, and the Studio library as JSON; importing that combined backup through the interface is not currently supported. Studio's **Export profile** produces an individually importable JSON file.
 
@@ -101,7 +111,7 @@ For a complete backup, stop the app and copy `data/`. Restore by stopping the ap
 
 ## Development
 
-Plain HTML, CSS, and JavaScript with a small Node.js server. No framework, bundler, or third-party runtime packages.
+Plain HTML, CSS, and JavaScript with a small Node.js server. No framework, bundler, or installed runtime packages. Configured accounts load Firebase SDK 13.0.0 from Google's CDN. Development dependencies support Firebase deployment and emulator tests.
 
 ```text
 server.mjs    Local server, market refresh, persistence
@@ -125,4 +135,4 @@ npm test
 
 [Skinport API](https://docs.skinport.com/items) supplies prices. The [ByMykel CS2 catalog](https://github.com/ByMykel/CSGO-API) maps exact item names to artwork and refreshes daily. Images download from Steam's CDN on demand and stay cached locally.
 
-Your wishlist is not uploaded. Public catalog and image requests contact the relevant providers. CS2 names and artwork belong to their respective owners. This project is not affiliated with Valve or Skinport.
+Guest data stays local. Signed-in wishlists and Studio profiles are saved to Firebase; existing guest data is uploaded only through the explicit migration action. Public catalog and image requests contact the relevant providers. CS2 names and artwork belong to their respective owners. This project is not affiliated with Valve or Skinport.

@@ -1,3 +1,4 @@
+import { request, storageLabel, ready } from "./account.js";
 import {
   REGISTRY,
   REGISTRY_VERSION,
@@ -132,22 +133,17 @@ async function flushSave() {
   }
   saveInFlight = true;
   pendingSave = false;
-  const payload = JSON.stringify(library);
+  const payload = structuredClone(library);
   try {
-    const r = await fetch("/api/studio", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: payload,
-    });
-    const data = await r.json();
-    if (!r.ok) {
-      if (r.status === 409) saveBlocked = true;
-      throw Error(data.error);
+    let data;
+    try {
+      data = await request("/api/studio", payload);
+    } catch (e) {
+      if (e.status === 409) saveBlocked = true;
+      throw e;
     }
     library.revision = data.revision;
-    $("#save-status").textContent = pendingSave
-      ? "Saving…"
-      : "Saved on this computer";
+    $("#save-status").textContent = pendingSave ? "Saving…" : storageLabel();
     error("");
   } catch (e) {
     pendingSave = true;
@@ -297,7 +293,7 @@ function content() {
   const cat = STEPS[step][0];
   if (cat === "start") return startContent();
   if (cat === "profile")
-    return `<div class="profile-name-card"><span class="profile-symbol">a</span><label for="build-name">Build name</label><input id="build-name" maxlength="60" value="${esc(profile.displayName)}" placeholder="My match-day setup"><p>Autosaved on this computer. Export a profile JSON to move it to another device.</p></div><div class="studio-info-grid"><div><strong>Intentional by default.</strong><p>Nothing is applied to CS2 automatically. Only settings you choose are included in the download.</p></div><div><strong>Room to experiment.</strong><p>Duplicate a build before trying a new direction. Undo restores edits made during this session.</p></div></div>`;
+    return `<div class="profile-name-card"><span class="profile-symbol">a</span><label for="build-name">Build name</label><input id="build-name" maxlength="60" value="${esc(profile.displayName)}" placeholder="My match-day setup"><p>${storageLabel()}. Autosaved as you edit. Export a profile JSON to move it to another device.</p></div><div class="studio-info-grid"><div><strong>Intentional by default.</strong><p>Nothing is applied to CS2 automatically. Only settings you choose are included in the download.</p></div><div><strong>Room to experiment.</strong><p>Duplicate a build before trying a new direction. Undo restores edits made during this session.</p></div></div>`;
   if (cat === "weapon")
     return `<div class="quick-options">${pill("Near center", "weapon", "center")}${pill("Far edge", "weapon", "edge")}${pill("Low profile", "weapon", "low")}</div><p class="studio-note">Near center uses an inward offset (−2). CS2 has no separate center-handed mode. The item artwork illustrates direction, not a first-person viewmodel.</p>${fields(cat)}`;
   if (cat === "crosshair") return crossContent();
@@ -584,7 +580,7 @@ $("#duplicate-profile").onclick = () =>
 $("#delete-profile").onclick = () => {
   if (
     !confirm(
-      `Delete “${profile.displayName}” from this computer? Export a JSON backup first if you want to keep it.`,
+      `Delete “${profile.displayName}” from this workspace? Export a JSON backup first if you want to keep it.`,
     )
   )
     return;
@@ -836,18 +832,13 @@ new ResizeObserver(() => {
 }).observe($("#studio-scene"));
 async function init() {
   try {
-    const r = await fetch("/api/studio");
-    if (!r.ok)
-      throw Error(
-        "Cannot load Studio profiles. Your saved files have not been changed.",
-      );
-    const data = await r.json();
+    const data = await request("/api/studio");
     if (
       !Array.isArray(data.profiles) ||
       data.profiles.some((p) => validateProfile(p).length)
     )
       throw Error(
-        "The saved Studio library needs recovery. Export/back up data/studio.json before repairing it.",
+        "The saved Studio library could not be read safely. Keep a backup before repairing or restoring your builds.",
       );
     library = data;
     profile =
@@ -856,7 +847,7 @@ async function init() {
     if (!profile) {
       profile = freshProfile();
       scheduleSave();
-    } else $("#save-status").textContent = "Saved on this computer";
+    } else $("#save-status").textContent = storageLabel();
     render();
   } catch (e) {
     error(e.message);
@@ -866,4 +857,5 @@ async function init() {
       .forEach((b) => (b.disabled = true));
   }
 }
+await ready;
 init();

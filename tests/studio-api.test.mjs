@@ -101,6 +101,34 @@ test("Studio API persists across restart, rejects invalid writes and stale revis
     assert.deepEqual(saved.profiles, [profile]);
     const backup = await (await fetch(base + "/api/export")).json();
     assert.deepEqual(backup.studio, saved);
+    assert.deepEqual(
+      await (await fetch(base + "/api/firebase-config")).json(),
+      { enabled: false },
+    );
+    const publicConfig = {
+      apiKey: "test-public-key",
+      projectId: "demo-atelier",
+      appId: "test-app",
+      authDomain: "demo-atelier.firebaseapp.com",
+    };
+    await writeFile(
+      path.join(root, "data/firebase-config.json"),
+      JSON.stringify({ ...publicConfig, private_key: "must never be served" }),
+    );
+    assert.deepEqual(
+      await (await fetch(base + "/api/firebase-config")).json(),
+      { enabled: true, firebaseConfig: publicConfig },
+    );
+    const quoteResponse = await fetch(base + "/api/quotes", {
+      method: "POST",
+      headers: { Origin: base, "Content-Type": "application/json" },
+      body: JSON.stringify({ names: ["Unknown item"] }),
+    });
+    assert.equal(quoteResponse.status, 200);
+    assert.equal(
+      (await quoteResponse.json()).items[0].market_hash_name,
+      "Unknown item",
+    );
   } finally {
     await stop();
     await rm(root, { recursive: true, force: true });

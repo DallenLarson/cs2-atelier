@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Atelier — Your CS2 Hub</title>
+    <meta
+      name="description"
+      content="Your CS2 home. Follow the market, collect favorites, and refine your setup."
+    />
+    <link rel="icon" href="/favicon.svg" />
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/hub.css" />
+  </head>
+  <body class="hub-page">
+    <aside>
+      <a class="brand" href="/" aria-label="Atelier home"
+        ><span class="logo">a</span>atelier<span class="edition">CS2</span></a
+      >
+      <div class="nav-label">YOUR SPACE</div>
+      <nav>
+        <a class="nav active" href="/" aria-current="page"
+          ><span>⌂</span> Overview</a
+        ><a class="nav" href="/market"><span>◈</span> Market</a
+        ><a class="nav" href="/market#wishlist"><span>♡</span> Wishlist</a
+        ><a class="nav" href="/studio"><span>⌘</span> Loadout Studio</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <a class="account-link" href="/account"
+          ><span class="account-avatar" id="sidebar-avatar">a</span
+          ><span
+            ><strong data-account-label>Sign in</strong
+            ><small>Your personal workspace</small></span
+          ></a
+        >
+        <p>Less friction.<br />More Counter-Strike.</p>
+      </div>
+    </aside>
+    <main>
+      <header>
+        <div class="breadcrumb">
+          Your workspace <span>/</span> <b>Overview</b>
+        </div>
+        <span class="hub-status" id="hub-status">Opening your hub…</span>
+      </header>
+      <section class="heading">
+        <div>
+          <div class="eyebrow">THE COUNTER-STRIKE WORKSPACE</div>
+          <h1 id="greeting">Your game. All together.</h1>
+          <p>A home for your favorites, your setup, and what comes next.</p>
+        </div>
+      </section>
+      <div id="hub-error" class="hub-notice" role="alert" hidden></div>
+      <section class="hub-hero">
+        <div class="hero-copy">
+          <span class="eyebrow">ATELIER · CS2 HUB</span>
+          <h2>A little more<br />in your element.</h2>
+          <p>
+            Find something worth watching.<br />Build a setup that feels like
+            you.<br />Keep it all in one place.
+          </p>
+          <a class="primary" href="/studio"
+            >Open Loadout Studio <span>↗</span></a
+          >
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="hero-orbit"></div>
+          <span class="hero-caption">MAKE IT YOURS.</span
+          ><img
+            src="/api/artwork?name=M4A1-S%20%7C%20Printstream%20(Field-Tested)&size=large"
+            alt=""
+          /><span class="art-label">M4A1-S <b>Printstream</b></span>
+        </div>
+      </section>
+      <section class="hub-account" aria-label="Account">
+        <div class="account-intro">
+          <span class="account-avatar" id="account-avatar">a</span>
+          <div>
+            <span class="eyebrow" id="account-kicker"
+              >ONE ACCOUNT. YOUR WHOLE WORKSPACE.</span
+            >
+            <h2 id="account-title">Pick up where you left off.</h2>
+            <p id="account-description">
+              Use your Google account to keep wishlists and loadouts together.
+              No new password to remember.
+            </p>
+          </div>
+        </div>
+        <div class="account-actions">
+          <button class="google-button" id="google-signin" disabled>
+            <span class="google-symbol">G</span> Continue with Google</button
+          ><a id="guest-link" href="/market">Explore as a guest ↗</a
+          ><button class="button" id="signout" hidden>Sign out</button
+          ><span class="account-note" id="account-note" role="status"
+            >Checking account availability…</span
+          >
+        </div>
+      </section>
+      <section class="migration-card" id="migration" hidden>
+        <div>
+          <h3>Already made yourself at home?</h3>
+          <p>
+            Bring this computer’s wishlist and loadouts to your account.
+            Existing cloud entries win on duplicates; your local originals stay
+            here.
+          </p>
+        </div>
+        <button class="button" id="import-local">
+          Bring local data to my account
+        </button>
+      </section>
+      <div class="hub-section-heading">
+        <h2>Your workspace</h2>
+        <span id="workspace-mode">Guest workspace · this computer</span>
+      </div>
+      <section class="hub-tools">
+        <a class="hub-tool market-tool" href="/market"
+          ><span class="tool-symbol">◈</span><span class="tool-arrow">↗</span>
+          <h3>The market, in focus.</h3>
+          <p>Explore skins and follow current Skinport listings.</p>
+          <div class="tool-foot">
+            <strong id="market-count">—</strong><span>market items</span>
+          </div></a
+        ><a class="hub-tool wishlist-tool" href="/market#wishlist"
+          ><span class="tool-symbol">♡</span><span class="tool-arrow">↗</span>
+          <h3>A few favorites.</h3>
+          <p>Your next pickup, at a price worth waiting for.</p>
+          <div class="tool-foot">
+            <strong id="wishlist-count">—</strong><span>saved items</span>
+          </div></a
+        ><a class="hub-tool studio-tool" href="/studio"
+          ><span class="tool-symbol">⌘</span><span class="tool-arrow">↗</span>
+          <h3>Made for your game.</h3>
+          <p>Refine your crosshair, viewmodel, controls, and feel.</p>
+          <div class="tool-foot">
+            <strong id="build-count">—</strong><span>personal builds</span>
+          </div></a
+        >
+      </section>
+      <section class="hub-bottom">
+        <div>
+          <span class="eyebrow">YOUR SPACE, YOUR CHOICE</span>
+          <h3>Easy to enter. Easy to take with you.</h3>
+          <p>
+            Browse as a guest, or sign in for account storage. Export your data
+            whenever you need it.
+          </p>
+        </div>
+        <button class="button" id="hub-export">Export my data</button>
+      </section>
+      <footer>
+        <span>Atelier · A considered space for Counter-Strike.</span
+        ><span>Market · Wishlist · Loadout Studio</span>
+      </footer>
+    </main>
+    <script type="module" src="/hub.js"></script>
+  </body>
+</html>

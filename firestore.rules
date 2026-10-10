@@ -1,0 +1,25 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function owner(uid) { return request.auth != null && request.auth.uid == uid; }
+    match /users/{uid}/private/wishlist {
+      allow read, delete: if owner(uid);
+      allow create, update: if owner(uid)
+        && request.resource.data.keys().hasOnly(['wishlist'])
+        && request.resource.data.wishlist is list
+        && request.resource.data.wishlist.size() <= 500;
+    }
+    match /users/{uid}/private/studio {
+      allow read, delete: if owner(uid);
+      function valid() {
+        return request.resource.data.keys().hasOnly(['profiles', 'activeId', 'revision'])
+          && request.resource.data.profiles is list
+          && request.resource.data.profiles.size() <= 50
+          && (request.resource.data.activeId == null || request.resource.data.activeId is string)
+          && request.resource.data.revision is int;
+      }
+      allow create: if owner(uid) && valid() && request.resource.data.revision == 1;
+      allow update: if owner(uid) && valid() && request.resource.data.revision == resource.data.revision + 1;
+    }
+  }
+}

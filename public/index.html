@@ -18,17 +18,26 @@
       >
       <div class="nav-label">YOUR SPACE</div>
       <nav>
+        <a class="nav" href="/" style="text-decoration: none"
+          ><span>⌂</span> Overview</a
+        >
         <button class="nav active" data-view="all">
           <span>◈</span> Market <span class="nav-end">⌘</span></button
         ><button class="nav" data-view="wishlist">
           <span>♡</span> Wishlist <span id="wish-count" class="badge">0</span>
         </button>
       </nav>
-      <a class="nav" href="/studio" style="text-decoration:none"><span>⌘</span> Loadout Studio</a>
+      <a class="nav" href="/studio" style="text-decoration: none"
+        ><span>⌘</span> Loadout Studio</a
+      >
       <div class="sidebar-bottom">
         <div class="local-icon">⌁</div>
         <strong>A space of your own.</strong>
-        <p>Saved on this computer.<br />Always yours to keep.</p>
+        <p>
+          <span data-storage-label>Saved on this computer.</span><br />Always
+          yours to keep.
+        </p>
+        <a class="text-button" href="/account" data-account-label>Sign in</a>
         <button id="backup" class="text-button">Export your data</button>
       </div>
     </aside>
@@ -144,6 +153,6 @@
       <div id="detail-body"></div>
     </dialog>
     <div id="toast" role="status"></div>
-    <script src="/app.js" defer></script>
+    <script type="module" src="/app.js" defer></script>
   </body>
 </html>

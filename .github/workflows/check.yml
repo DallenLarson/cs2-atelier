@@ -15,4 +15,19 @@ jobs:
       - run: node --check public/app.js
       - run: node --check public/studio.js
       - run: node --check public/studio-core.js
+      - run: node --check public/account.js && node --check public/account-core.js && node --check public/hub.js
       - run: node --test tests/*.test.mjs
+  firebase-rules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - run: npm ci --ignore-scripts
+      - run: npm run test:rules

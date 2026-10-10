@@ -19,8 +19,9 @@
       >
       <div class="nav-label">YOUR SPACE</div>
       <nav>
-        <a class="nav" href="/"><span>◈</span> Market</a
-        ><a class="nav" href="/#wishlist"><span>♡</span> Wishlist</a
+        <a class="nav" href="/"><span>⌂</span> Overview</a
+        ><a class="nav" href="/market"><span>◈</span> Market</a
+        ><a class="nav" href="/market#wishlist"><span>♡</span> Wishlist</a
         ><a class="nav active" href="/studio" aria-current="page"
           ><span>⌘</span> Loadout Studio</a
         >
@@ -28,7 +29,11 @@
       <div class="sidebar-bottom">
         <div class="local-icon">⌁</div>
         <strong>Your game. Your settings.</strong>
-        <p>Saved on this computer.<br />No game files changed.</p>
+        <p>
+          <span data-storage-label>Saved on this computer.</span><br />No game
+          files changed.
+        </p>
+        <a class="text-button" href="/account" data-account-label>Sign in</a>
         <span>Studio 1.0 · Schema 1</span>
       </div>
     </aside>
@@ -142,7 +147,7 @@
           <div id="preview-readout" class="preview-readout"></div>
           <div class="preview-summary">
             <span id="preview-change-count">0 overrides</span
-            ><span>Stored locally</span>
+            ><span data-storage-label>Saved on this computer.</span>
           </div>
           <details class="command-peek">
             <summary>What will this change?</summary>
@@ -151,7 +156,7 @@
         </section>
       </div>
       <footer>
-        <span>Atelier Studio · No account. No game-file access.</span
+        <span>Atelier Studio · Your setup. No game-file access.</span
         ><a
           href="https://github.com/SteamTracking/GameTracking-CS2/blob/master/DumpSource2/convars.txt"
           target="_blank"

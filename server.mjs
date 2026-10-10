@@ -94,6 +94,32 @@ const server = http.createServer(async (req, res) => {
     )
       return send(res, 403, { error: "Invalid host" });
     const url = new URL(req.url, `http://127.0.0.1:${port}`);
+    if (req.method === "GET" && url.pathname === "/api/firebase-config") {
+      const config = load("firebase-config.json", null);
+      if (!config) return send(res, 200, { enabled: false });
+      const firebaseConfig = Object.fromEntries(
+        [
+          "apiKey",
+          "authDomain",
+          "projectId",
+          "appId",
+          "messagingSenderId",
+          "storageBucket",
+        ]
+          .filter((key) => typeof config[key] === "string")
+          .map((key) => [key, config[key]]),
+      );
+      if (
+        !firebaseConfig.apiKey ||
+        !firebaseConfig.projectId ||
+        !firebaseConfig.appId ||
+        !firebaseConfig.authDomain
+      )
+        return send(res, 500, {
+          error: "Firebase web configuration is incomplete.",
+        });
+      return send(res, 200, { enabled: true, firebaseConfig });
+    }
     if (req.method === "GET" && url.pathname === "/api/studio")
       return send(res, 200, studio);
     if (req.method === "GET" && url.pathname === "/api/artwork")
@@ -188,6 +214,25 @@ const server = http.createServer(async (req, res) => {
           return send(res, 413, { error: "Request too large" });
       }
       const input = JSON.parse(body || "{}");
+      if (url.pathname === "/api/quotes") {
+        if (
+          !Array.isArray(input.names) ||
+          input.names.length > 500 ||
+          input.names.some((n) => typeof n !== "string" || n.length > 300)
+        )
+          return send(res, 400, { error: "Invalid item list." });
+        return send(res, 200, {
+          items: input.names.map((name) => ({
+            ...(cache.items.find((i) => i.market_hash_name === name) || {
+              market_hash_name: name,
+              min_price: null,
+              quantity: 0,
+              item_page: "https://skinport.com/market",
+            }),
+            ...artworkFor(name),
+          })),
+        });
+      }
       if (url.pathname === "/api/studio") {
         if (input.revision !== studio.revision)
           return send(res, 409, {
@@ -252,7 +297,13 @@ const server = http.createServer(async (req, res) => {
       }
     }
     const files = {
-      "/": "index.html",
+      "/": "hub.html",
+      "/account": "hub.html",
+      "/market": "index.html",
+      "/hub.js": "hub.js",
+      "/hub.css": "hub.css",
+      "/account.js": "account.js",
+      "/account-core.js": "account-core.js",
       "/app.js": "app.js",
       "/style.css": "style.css",
       "/favicon.svg": "favicon.svg",
@@ -273,7 +324,7 @@ const server = http.createServer(async (req, res) => {
               : "text/html",
         "Cache-Control": "no-cache",
         "Content-Security-Policy":
-          "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; script-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'",
+          "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; script-src 'self' https://www.gstatic.com https://apis.google.com; connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firestore.googleapis.com https://www.googleapis.com; frame-src https://*.firebaseapp.com; frame-ancestors 'none'; base-uri 'none'; form-action 'self'",
       });
       return res.end(readFileSync(path.join(root, "public", f)));
     }

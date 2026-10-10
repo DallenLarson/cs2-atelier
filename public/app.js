@@ -1,3 +1,4 @@
+import { request as api, exportBackup, ready, account } from "./account.js";
 const $ = (s) => document.querySelector(s),
   money = (n) =>
     n == null
@@ -28,21 +29,6 @@ let state = { wishlist: [] },
   selected = null,
   lastUpdated = -1,
   toastTimer;
-async function api(url, body) {
-  const r = await fetch(
-    url,
-    body === undefined
-      ? {}
-      : {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        },
-  );
-  const data = await r.json();
-  if (!r.ok) throw Error(data.error || "Unable to connect");
-  return data;
-}
 function toast(text) {
   $("#toast").textContent = text;
   $("#toast").classList.add("visible");
@@ -127,7 +113,7 @@ async function sync() {
     $("#status-dot").className = "offline";
     $("#notice").hidden = false;
     $("#notice").textContent =
-      "The local app is not responding. Relaunch Atelier to resume updates.";
+      e.message || "The app is not responding. Reload to reconnect.";
   }
 }
 async function render() {
@@ -178,7 +164,13 @@ async function save(name, remove = false, target) {
     });
     await sync();
     await render();
-    toast(remove ? "Removed from your wishlist" : "Saved on this computer");
+    toast(
+      remove
+        ? "Removed from your wishlist"
+        : account.user
+          ? "Saved to your account"
+          : "Saved on this computer",
+    );
   } catch (e) {
     toast(e.message);
     throw e;
@@ -220,8 +212,9 @@ async function detail(item) {
     if (selected !== item) return;
     const h = data.history;
     if (h.length < 2) {
-      $("#history").innerHTML =
-        '<p class="detail-muted">Your price history starts when you save this item. A chart appears after two automatic updates.</p>';
+      $("#history").innerHTML = account.user
+        ? '<p class="detail-muted">Account wishlists sync across devices. Price-history charts are currently available in the local guest tracker only.</p>'
+        : '<p class="detail-muted">Your price history starts when you save this item. A chart appears after two automatic updates.</p>';
       return;
     }
     const min = Math.min(...h.map((p) => p.price)),
@@ -313,7 +306,7 @@ $("#detail").onclick = (e) => {
   }
 };
 $("#backup").onclick = () => {
-  location.href = "/api/export";
+  exportBackup().catch((e) => toast(e.message));
 };
 $("#refresh").onclick = async () => {
   try {
@@ -350,6 +343,7 @@ window.addEventListener("hashchange", () => {
       : '[data-view="all"]',
   ).click();
 });
+await ready;
 sync();
 setInterval(sync, 15000);
 $("#detail").onclick = null;
