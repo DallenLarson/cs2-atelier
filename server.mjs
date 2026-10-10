@@ -9,6 +9,7 @@ import {
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { artworkFor, serveArtwork, updateArtwork } from "./artwork.mjs";
+import { validateProfile } from "./public/studio-core.js";
 const root = path.dirname(fileURLToPath(import.meta.url)),
   data = path.join(root, "data");
 mkdirSync(data, { recursive: true });
@@ -28,6 +29,7 @@ const save = (name, value) => {
 let state = load("wishlist.json", { wishlist: [] }),
   cache = load("market.json", { items: [], updated: 0 }),
   history = load("history.json", {});
+let studio = load("studio.json", { revision: 0, profiles: [], activeId: null });
 let busy = false,
   error = "",
   lastAttempt = 0,
@@ -92,6 +94,8 @@ const server = http.createServer(async (req, res) => {
     )
       return send(res, 403, { error: "Invalid host" });
     const url = new URL(req.url, `http://127.0.0.1:${port}`);
+    if (req.method === "GET" && url.pathname === "/api/studio")
+      return send(res, 200, studio);
     if (req.method === "GET" && url.pathname === "/api/artwork")
       return await serveArtwork(url, res);
     if (req.method === "GET" && url.pathname === "/api/state")
@@ -167,6 +171,7 @@ const server = http.createServer(async (req, res) => {
       return send(res, 200, {
         ...state,
         history,
+        studio,
         exportedAt: new Date().toISOString(),
       });
     }
@@ -183,6 +188,37 @@ const server = http.createServer(async (req, res) => {
           return send(res, 413, { error: "Request too large" });
       }
       const input = JSON.parse(body || "{}");
+      if (url.pathname === "/api/studio") {
+        if (input.revision !== studio.revision)
+          return send(res, 409, {
+            error:
+              "Another window saved a newer version. Export your profile JSON, then reload before saving again.",
+          });
+        if (!Array.isArray(input.profiles) || input.profiles.length > 50)
+          return send(res, 400, {
+            error: "A library can hold up to 50 profiles.",
+          });
+        const errors = input.profiles.flatMap(validateProfile);
+        if (
+          new Set(input.profiles.map((p) => p.id)).size !==
+          input.profiles.length
+        )
+          errors.push("Duplicate profile IDs.");
+        if (
+          input.activeId !== null &&
+          !input.profiles.some((p) => p.id === input.activeId)
+        )
+          errors.push("Invalid active profile.");
+        if (errors.length) return send(res, 400, { error: errors.join(" ") });
+        const next = {
+          revision: studio.revision + 1,
+          profiles: input.profiles,
+          activeId: input.activeId,
+        };
+        save("studio.json", next);
+        studio = next;
+        return send(res, 200, { revision: studio.revision });
+      }
       if (url.pathname === "/api/wishlist") {
         if (typeof input.name !== "string" || input.name.length > 300)
           return send(res, 400, { error: "Invalid item" });
@@ -220,6 +256,10 @@ const server = http.createServer(async (req, res) => {
       "/app.js": "app.js",
       "/style.css": "style.css",
       "/favicon.svg": "favicon.svg",
+      "/studio": "studio.html",
+      "/studio.js": "studio.js",
+      "/studio-core.js": "studio-core.js",
+      "/studio.css": "studio.css",
     };
     if (req.method === "GET" && files[url.pathname]) {
       const f = files[url.pathname];

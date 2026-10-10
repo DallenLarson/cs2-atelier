@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Loadout Studio — Atelier</title>
+    <meta
+      name="description"
+      content="Build a personal CS2 config with visual previews and selective local exports."
+    />
+    <link rel="icon" href="/favicon.svg" />
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/studio.css" />
+  </head>
+  <body class="studio-page">
+    <aside>
+      <a class="brand" href="/" aria-label="Atelier home"
+        ><span class="logo">a</span>atelier<span class="edition">CS2</span></a
+      >
+      <div class="nav-label">YOUR SPACE</div>
+      <nav>
+        <a class="nav" href="/"><span>◈</span> Market</a
+        ><a class="nav" href="/#wishlist"><span>♡</span> Wishlist</a
+        ><a class="nav active" href="/studio" aria-current="page"
+          ><span>⌘</span> Loadout Studio</a
+        >
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="local-icon">⌁</div>
+        <strong>Your game. Your settings.</strong>
+        <p>Saved on this computer.<br />No game files changed.</p>
+        <span>Studio 1.0 · Schema 1</span>
+      </div>
+    </aside>
+    <main>
+      <header>
+        <div class="breadcrumb">
+          Your workspace <span>/</span> <b>Loadout Studio</b>
+        </div>
+        <span id="save-status" role="status">Opening your studio…</span>
+      </header>
+      <section class="heading">
+        <div>
+          <div class="eyebrow">COUNTER-STRIKE 2 · LOADOUT STUDIO</div>
+          <h1>Your game. Refined.</h1>
+          <p id="subtitle">
+            A few deliberate choices. A setup that feels like you.
+          </p>
+        </div>
+        <button class="button" id="review-top">Review & export</button>
+      </section>
+      <div class="studio-toolbar">
+        <label for="profile-picker">Your builds</label
+        ><select id="profile-picker" aria-label="Saved profiles"></select
+        ><button id="new-profile" class="text-button">New</button
+        ><button id="duplicate-profile" class="text-button">Duplicate</button
+        ><button id="delete-profile" class="text-button">Delete</button
+        ><span class="toolbar-spacer"></span
+        ><button id="undo" class="button">Undo</button
+        ><button id="export-json" class="button">Export profile</button
+        ><button id="import-open" class="button">Import</button>
+      </div>
+      <div id="studio-error" class="studio-notice" role="alert" hidden></div>
+      <div class="studio-progress">
+        <div>
+          <span id="step-count">01 / 09</span
+          ><span id="change-count">Nothing changed</span>
+        </div>
+        <div class="progress-track"><span id="progress-fill"></span></div>
+      </div>
+      <nav id="step-nav" class="step-nav" aria-label="Studio steps"></nav>
+      <div class="studio-layout">
+        <section class="editor-panel">
+          <div class="step-heading">
+            <div>
+              <span id="section-kicker" class="eyebrow"></span>
+              <h2 id="section-title" tabindex="-1"></h2>
+              <p id="section-description"></p>
+            </div>
+            <button id="reset-step" class="text-button">Reset step</button>
+          </div>
+          <div id="step-content"></div>
+          <div class="step-footer">
+            <button class="button" id="back">Back</button
+            ><button class="text-button" id="skip">Skip this step</button
+            ><button class="primary" id="continue">Continue</button>
+          </div>
+        </section>
+        <section class="preview-panel" aria-label="Live preview">
+          <div class="preview-top">
+            <span id="preview-label">YOUR SETUP</span
+            ><span class="approx-badge">ILLUSTRATION</span>
+          </div>
+          <div class="studio-scene" id="studio-scene">
+            <div class="scene-grid"></div>
+            <canvas
+              id="radar-canvas"
+              width="200"
+              height="200"
+              aria-label="Illustrative radar"
+            ></canvas>
+            <div class="weapon-anchor" id="weapon-anchor">
+              <img
+                id="studio-weapon"
+                src="/api/artwork?name=AK-47%20%7C%20Redline%20(Field-Tested)&size=large"
+                alt="AK-47 item artwork, used only to illustrate relative position"
+              /><span id="weapon-fallback" hidden>Weapon position</span>
+            </div>
+            <canvas
+              id="crosshair-canvas"
+              aria-label="Illustrative crosshair"
+            ></canvas>
+            <div class="sample-hud" id="sample-hud">
+              <span>100 <small>HP</small></span
+              ><span>12 : 9</span><span>30 <small>/ 90</small></span>
+            </div>
+          </div>
+          <div class="preview-options">
+            <label for="preview-weapon">Artwork</label
+            ><select id="preview-weapon">
+              <option value="AK-47 | Redline (Field-Tested)">AK-47</option>
+              <option value="M4A1-S | Printstream (Field-Tested)">
+                M4A1-S
+              </option>
+              <option value="AWP | Asiimov (Field-Tested)">AWP</option>
+              <option value="Desert Eagle | Printstream (Field-Tested)">
+                Desert Eagle
+              </option></select
+            ><label for="preview-scene" class="sr-only"
+              >Preview background</label
+            ><select id="preview-scene">
+              <option value="slate">Slate</option>
+              <option value="light">Bright</option>
+              <option value="green">Foliage tones</option>
+            </select>
+          </div>
+          <p class="preview-disclaimer">
+            Illustrative 2D layout, not a first-person game capture. Untouched
+            fields use preview values, not your current in-game settings. Final
+            rendering depends on CS2 and your display.
+          </p>
+          <div id="preview-readout" class="preview-readout"></div>
+          <div class="preview-summary">
+            <span id="preview-change-count">0 overrides</span
+            ><span>Stored locally</span>
+          </div>
+          <details class="command-peek">
+            <summary>What will this change?</summary>
+            <pre id="command-peek"></pre>
+          </details>
+        </section>
+      </div>
+      <footer>
+        <span>Atelier Studio · No account. No game-file access.</span
+        ><a
+          href="https://github.com/SteamTracking/GameTracking-CS2/blob/master/DumpSource2/convars.txt"
+          target="_blank"
+          rel="noreferrer"
+          >Command reference · checked Oct 9, 2026</a
+        >
+      </footer>
+    </main>
+    <dialog id="import-dialog">
+      <button class="close" id="import-close" aria-label="Close import">
+        ×
+      </button>
+      <h2>Bring your setup.</h2>
+      <p>
+        Import Studio JSON or an autoexec. Only recognized commands are
+        accepted. Your existing build stays in the library.
+      </p>
+      <input
+        id="import-file"
+        type="file"
+        accept=".cfg,.txt,.json"
+        aria-label="Choose config or profile file"
+      /><textarea
+        id="import-text"
+        rows="9"
+        placeholder="Paste your autoexec or Studio JSON…"
+        aria-label="Config or profile text"
+      ></textarea>
+      <div id="import-report" role="status"></div>
+      <button id="import-check" class="button">Check import</button
+      ><button id="import-apply" class="primary" disabled>
+        Create imported build
+      </button>
+    </dialog>
+    <dialog id="ready-dialog">
+      <button
+        class="close"
+        id="ready-close"
+        aria-label="Close installation guide"
+      >
+        ×
+      </button>
+      <div class="ready-mark">✓</div>
+      <h2>Your loadout is ready.</h2>
+      <p>
+        Download requested: <strong>autoexec.cfg</strong>. Your browser may ask
+        where to save it.
+      </p>
+      <ol>
+        <li>Back up your existing autoexec before merging or replacing it.</li>
+        <li>In Steam: Counter-Strike 2 → Manage → Browse local files.</li>
+        <li>
+          Place the file in <code>game\csgo\cfg</code>. Check that it is not
+          named <code>autoexec.cfg.txt</code>.
+        </li>
+        <li>
+          Open the CS2 console and run <code>exec autoexec.cfg</code>.
+          Optionally add <code>+exec autoexec.cfg</code> in Steam launch
+          options.
+        </li>
+        <li>
+          Look for <code>Atelier Loadout Studio loaded</code>, then query the
+          changed settings to verify their values.
+        </li>
+      </ol>
+      <button id="ready-done" class="primary">Back to review</button>
+    </dialog>
+    <div id="toast" role="status"></div>
+    <script type="module" src="/studio.js"></script>
+  </body>
+</html>

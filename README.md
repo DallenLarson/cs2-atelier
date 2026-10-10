@@ -25,6 +25,24 @@ _Actual app screenshot. Prices shown are a snapshot, not current quotes._
 
 Responsive layouts support smaller windows. Reduced-motion preferences disable animation.
 
+## Loadout Studio
+
+Open **Loadout Studio** in the sidebar to create a personal CS2 settings profile in the same calm workspace.
+
+![Atelier Loadout Studio](docs/studio-preview.png)
+
+- Nine steps cover a starting point, profile name, weapon placement, crosshair, sensitivity, radar/HUD, brightness/audio, keybinds, and export.
+- Every setting starts at **Keep current**. Only explicit overrides enter your `autoexec.cfg`; zero is a real value.
+- Save multiple profiles locally, duplicate them, undo edits, and import/export Studio JSON or recognized config commands.
+- Preview relative weapon placement, crosshair shape, HUD color, radar, and brightness. Previews are illustrative 2D layouts, not an exact first-person CS2 renderer; untouched settings use reference values.
+- Review changes, download a config, follow installation instructions, and check pasted console output for common loading errors.
+
+The app never reads or writes your game files. It cannot discover your existing binds or verify in-game execution. Key replacements require acknowledgment; duplicate keys block config export. Unknown commands, aliases, scripts, and legacy crosshair commands are skipped on import with a report.
+
+Command support is a curated snapshot checked **October 9, 2026** against the [SteamTracking CS2 convar dump](https://github.com/SteamTracking/GameTracking-CS2/blob/master/DumpSource2/convars.txt). It uses the current crosshair length/gap/thickness/opacity commands. A future game update can change command behavior; this registry does not update automatically. Market refresh remains automatic.
+
+Pro-inspired choices are seven-field aim/viewmodel snapshots from [ProSettings](https://prosettings.net/), with links in the app. They are partial reported settings, not endorsements or verified current configurations. Observed October 9; source pages displayed October 10, 2026, an unresolved date discrepancy disclosed in the UI. Custom edits take precedence.
+
 ## Quick start
 
 Install [Node.js 22 or newer](https://nodejs.org/), then:
@@ -60,17 +78,18 @@ Your computer must be awake and online for fresh prices. Offline mode retains th
 
 ## Local by design
 
-| File                 | Contents                      |
-| -------------------- | ----------------------------- |
-| `data/wishlist.json` | Saved items and target prices |
-| `data/market.json`   | Cached market prices          |
-| `data/history.json`  | Price observations            |
-| `data/artwork.json`  | Artwork catalog               |
-| `data/images/`       | Cached transparent images     |
+| File                 | Contents                          |
+| -------------------- | --------------------------------- |
+| `data/wishlist.json` | Saved items and target prices     |
+| `data/market.json`   | Cached market prices              |
+| `data/history.json`  | Price observations                |
+| `data/studio.json`   | Loadout profiles and active build |
+| `data/artwork.json`  | Artwork catalog                   |
+| `data/images/`       | Cached transparent images         |
 
 The `data/` folder, machine-specific shortcuts, and runtime paths are ignored by Git. The server listens only on `127.0.0.1`. No analytics or cloud account is required.
 
-For a complete backup, stop the app and copy `data/`. Restore by stopping the app and replacing that folder with your backup. **Export your data** downloads wishlist and history as JSON; importing that export through the interface is not currently supported.
+For a complete backup, stop the app and copy `data/`. Restore by stopping the app and replacing that folder with your backup. **Export your data** downloads wishlist, history, and the Studio library as JSON; importing that combined backup through the interface is not currently supported. Studio's **Export profile** produces an individually importable JSON file.
 
 ## What to expect
 
@@ -91,12 +110,15 @@ public/       Interface, styles, favicon
 docs/         README preview
 ```
 
-GitHub Actions runs these syntax checks:
+GitHub Actions runs syntax checks and the config/persistence tests:
 
 ```sh
 node --check server.mjs
 node --check artwork.mjs
 node --check public/app.js
+node --check public/studio.js
+node --check public/studio-core.js
+npm test
 ```
 
 ## Sources and credits

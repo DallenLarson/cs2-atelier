@@ -342,6 +342,14 @@ document.addEventListener("keydown", (e) => {
     $("#search").focus();
   }
 });
+if (location.hash === "#wishlist") $('[data-view="wishlist"]').click();
+window.addEventListener("hashchange", () => {
+  $(
+    location.hash === "#wishlist"
+      ? '[data-view="wishlist"]'
+      : '[data-view="all"]',
+  ).click();
+});
 sync();
 setInterval(sync, 15000);
 $("#detail").onclick = null;
