@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>CS2 Stats & Leetify Rating Checker — CSKit</title>
+    <meta
+      name="description"
+      content="Look up a Counter-Strike 2 player by Steam ID or Leetify profile. View Leetify Rating, Aim, Positioning, Utility, Premier and FACEIT ratings."
+    />
+    <link rel="canonical" href="https://cskit.site/performance" />
+    <meta property="og:site_name" content="CSKit" />
+    <meta property="og:image" content="https://cskit.site/social-preview.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:title" content="CSKit — Your Counter-Strike toolkit" />
+    <meta
+      property="og:description"
+      content="Track the market. Build your loadout. Make it yours."
+    />
+    <meta property="og:url" content="https://cskit.site/performance" />
+    <meta name="theme-color" content="#0c0e11" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/hub.css" />
+    <link rel="stylesheet" href="/theme.css" />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:image:alt"
+      content="CSKit Counter-Strike market, wishlist and Loadout Studio"
+    />
+
+    <link rel="stylesheet" href="/performance.css" />
+  </head>
+  <body class="hub-page performance-page">
+    <aside>
+      <a class="brand" href="/" aria-label="CSKit home"
+        ><img src="/cskit-wordmark.png" width="174" height="58" alt="CSKit"
+      /></a>
+      <div class="nav-label">YOUR SPACE</div>
+      <nav>
+        <a class="nav" href="/"><span>⌂</span> Overview</a
+        ><a class="nav" href="/market"><span>◈</span> Market</a
+        ><a class="nav" href="/market#wishlist"><span>♡</span> Wishlist</a
+        ><a class="nav" href="/studio"><span>⌘</span> Loadout Studio</a>
+        <a class="nav active" href="/performance" aria-current="page"
+          ><span>▥</span> Performance</a
+        >
+      </nav>
+      <div class="sidebar-bottom">
+        <a class="account-link" href="/account"
+          ><span class="account-avatar" id="sidebar-avatar">C</span
+          ><span
+            ><strong data-account-label>Sign in</strong
+            ><small>Your personal workspace</small></span
+          ></a
+        >
+        <p>Less friction.<br />More Counter-Strike.</p>
+      </div>
+    </aside>
+    <main>
+      <header>
+        <div class="breadcrumb">
+          Your workspace <span>/</span> <b>Performance</b>
+        </div>
+        <span class="hub-status" id="hub-status">Data provided by Leetify</span>
+        <button
+          class="account-control"
+          id="account-control"
+          aria-label="Open account"
+        >
+          <span class="profile-photo" aria-hidden="true"
+            ><svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.7"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="8" r="3.5" />
+              <path d="M5 21v-2a7 7 0 0 1 14 0v2" /></svg></span
+          ><span class="account-control-label">Sign in</span>
+        </button>
+      </header>
+
+      <section class="heading">
+        <div>
+          <div class="eyebrow">COUNTER-STRIKE 2 · PERFORMANCE</div>
+          <h1>Know your game.</h1>
+          <p>
+            Your Leetify Rating, skill ratings, and recent results. One clear
+            view.
+          </p>
+        </div>
+      </section>
+      <section class="lookup-panel">
+        <form id="player-form">
+          <label for="player-input">Steam ID or profile link</label>
+          <div class="lookup-row">
+            <input
+              id="player-input"
+              required
+              maxlength="250"
+              autocomplete="off"
+              spellcheck="false"
+              placeholder="Steam64 ID, Steam profile or Leetify profile URL"
+              aria-describedby="lookup-help"
+            /><button class="primary" id="lookup-button">
+              Check performance <span>↗</span>
+            </button>
+          </div>
+          <p id="lookup-help">
+            Use a 17-digit Steam64 ID, steamcommunity.com/profiles/… or
+            leetify.com/app/profile/… link.
+          </p>
+          <p class="privacy-note">
+            Submitting sends this identifier to Leetify to retrieve its
+            available profile. CSKit does not save the identifier or returned
+            stats.
+          </p>
+        </form>
+      </section>
+      <div
+        id="lookup-status"
+        class="lookup-status"
+        role="status"
+        aria-live="polite"
+      >
+        Ready when you are.
+      </div>
+      <section id="performance-empty" class="performance-empty">
+        <span class="performance-glyph" aria-hidden="true">▥</span>
+        <h2>Every match tells a story.</h2>
+        <p>
+          Look up a profile to see where things stand.<br />Private profiles and
+          players without Leetify data may be unavailable.
+        </p>
+        <div class="empty-tags">
+          <span>Leetify Rating</span><span>Aim · Positioning · Utility</span
+          ><span>Recent matches</span>
+        </div>
+      </section>
+      <section id="performance-results" hidden aria-label="Player performance">
+        <div class="player-heading">
+          <div>
+            <span class="eyebrow">PLAYER PROFILE</span>
+            <h2 id="player-name"></h2>
+            <p id="player-id"></p>
+          </div>
+          <a
+            id="player-source"
+            class="button source-link"
+            target="_blank"
+            rel="noopener noreferrer"
+            >View on Leetify ↗</a
+          >
+        </div>
+        <div class="performance-metrics" id="performance-metrics"></div>
+        <div class="performance-section">
+          <h2>Skill ratings</h2>
+          <span>Reported by Leetify</span>
+        </div>
+        <div class="skill-grid" id="skill-grid"></div>
+        <div class="performance-section">
+          <h2>Recent matches</h2>
+          <span id="match-count"></span>
+        </div>
+        <div id="recent-matches" class="match-list"></div>
+        <p class="performance-footnote">
+          Unavailable values appear as —. Leetify controls each metric’s time
+          window and which matches are available. Scores are not recalculated by
+          CSKit.
+        </p>
+      </section>
+      <footer class="performance-attribution">
+        <a href="https://leetify.com/" target="_blank" rel="noopener noreferrer"
+          ><img
+            src="/leetify-attribution.png"
+            alt="Data provided by Leetify"
+            width="160"
+            height="68"
+        /></a>
+        <p>
+          CSKit is independent and is not endorsed by Leetify or Valve.<br />Results
+          are fetched on request and are not stored by CSKit.
+        </p>
+      </footer>
+    </main>
+    <script type="module" src="/performance.js"></script>
+  </body>
+</html>

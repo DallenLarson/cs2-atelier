@@ -297,6 +297,11 @@ const server = http.createServer(async (req, res) => {
       }
     }
     const files = {
+      "/performance": "performance.html",
+      "/performance.js": "performance.js",
+      "/performance-core.js": "performance-core.js",
+      "/performance.css": "performance.css",
+      "/leetify-attribution.png": "leetify-attribution.png",
       "/site.webmanifest": "site.webmanifest",
       "/apple-touch-icon.png": "apple-touch-icon.png",
       "/favicon.png": "favicon.png",
@@ -339,7 +344,7 @@ const server = http.createServer(async (req, res) => {
                     : "text/html",
         "Cache-Control": "no-cache",
         "Content-Security-Policy":
-          "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' https://*.googleusercontent.com; script-src 'self' https://www.gstatic.com https://apis.google.com; connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firestore.googleapis.com https://www.googleapis.com; frame-src https://*.firebaseapp.com; frame-ancestors 'none'; base-uri 'none'; form-action 'self'",
+          "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' https://*.googleusercontent.com; script-src 'self' https://www.gstatic.com https://apis.google.com; connect-src 'self' https://api-public.cs-prod.leetify.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firestore.googleapis.com https://www.googleapis.com; frame-src https://*.firebaseapp.com; frame-ancestors 'none'; base-uri 'none'; form-action 'self'",
       });
       return res.end(readFileSync(path.join(root, "public", f)));
     }

@@ -1,18 +1,18 @@
-# Leetify score checker — planned, not live
+# Performance integration — live
 
-The hub shows a disabled WIP card. No scores, Steam links, API requests or account linking are implemented yet.
+The Performance page supports Steam64 IDs, numeric Steam profile URLs, and Leetify profile URLs/UUIDs. It requests `/v3/profile` from Leetify's documented public API directly from the browser. No secret, paid backend or automated background polling is required. Keyless access has stricter upstream rate limits; the UI handles these explicitly and spaces user requests.
 
-Planned experience: explicitly connect or enter a Steam identifier, view the available Leetify rating and recent performance, and follow a source link to the original profile. Respect profile privacy, unavailable players and missing matches; never substitute example scores for real results.
+Displayed data: Leetify Rating (`ranks.leetify`), Premier, FACEIT level/Elo, Aim, Positioning, Utility, and up to ten recent matches. Missing fields appear as dashes. Recent-match raw rating fields are intentionally omitted because the API documentation uses inconsistent example scales. No metric is invented or rescaled. Private/unknown privacy modes fail closed.
 
-Before release:
+Requests use no-store and credentials omit. No profile identifier or response is saved to localStorage, Firestore, GitHub feeds, or server storage. An explicit Google/local-guest choice precedes the first lookup in a tab session. This is a public lookup, not proof of Steam account ownership. No automatic Steam account linking is implemented.
 
-- Confirm available fields, authentication, rate limits and permitted caching against the official API documentation: https://api-public-docs.cs-prod.leetify.com/.
-- Keep the Leetify API key in a server-side secret, never in the static website or public market feed. Establish hosting/quota requirements before provisioning a backend.
-- Preserve metric names and scales. Display the required unmodified attribution logo and source links according to https://leetify.com/blog/leetify-api-developer-guidelines/amp/.
-- Obtain the player's explicit choice before storing a Steam identifier with their CSKit account. Add per-user access rules and removal controls.
-- Test private profiles, missing data, expired credentials, rate limits and upstream outages. Show freshness and an honest unavailable state.
+Official references:
 
-CSKit is an independent project and is not endorsed by Leetify or Valve.
+- https://api-public-docs.cs-prod.leetify.com/
+- https://leetify.com/blog/leetify-api-developer-guidelines/amp/
+- Attribution image: unmodified “Leetify Badge White Large.png” from the official linked asset folder, Google Drive file `1SkDIGTav6Hqh15ZUMGEDCrmkOE-5mtKN`.
+
+Future work: vanity-name resolution and optional verified Steam linking. Any future API-key integration must keep secrets server-side; review hosting costs, privacy and current API requirements before adding it.
 
 # Search readiness
 

@@ -145,4 +145,4 @@ Guest data stays local. Signed-in wishlists and Studio profiles are saved to Fir
 
 Charcoal and orange styling uses the supplied CSKit wordmark and icon, including ICO, PNG and Apple touch favicons. The top-right account control displays a Google profile photo when available. New visitors choose Google sign-in or local guest storage before saving a wishlist or opening Studio; browsing the market stays open. Guest choice lasts for the tab session.
 
-The greyed-out Leetify score checker is planned, not functional. See [the roadmap and search readiness notes](docs/ROADMAP.md).
+[Performance](https://cskit.site/performance) looks up public Leetify profiles by Steam64 ID or numeric Steam / Leetify profile link. It shows overall and skill ratings, ranks and recent results. It uses the documented keyless public API directly, respects profile privacy, and does not persist returned data. Custom Steam vanity names are not supported. See [integration notes](docs/ROADMAP.md).
