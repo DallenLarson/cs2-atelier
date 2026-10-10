@@ -462,3 +462,40 @@ tbody tr:hover {
 .progress-track #progress-fill {
   background: #ff780f;
 }
+/* Keep planned tools discoverable across every workspace. */
+.nav.nav-wip:disabled {
+  opacity: 1;
+  cursor: not-allowed;
+  color: #8e949e;
+  background: #171a20;
+  border: 1px dashed #343943;
+  box-shadow: none;
+  margin-top: 14px;
+  gap: 8px;
+  font-size: 13px;
+}
+.nav-wip .wip-nav-name {
+  font-size: inherit;
+  line-height: 1.4;
+}
+.nav-wip-badge {
+  margin-left: auto;
+  font-size: 9px;
+  letter-spacing: 0.7px;
+  background: #2b3038;
+  color: #aeb5c0;
+  padding: 3px 5px;
+  border-radius: 4px;
+}
+@media (max-width: 720px) {
+  .nav.nav-wip:disabled {
+    margin-top: 0;
+    font-size: 11px;
+  }
+  .nav-wip .nav-wip-badge {
+    font-size: 8px;
+  }
+  .studio-page aside nav {
+    flex-wrap: wrap;
+  }
+}

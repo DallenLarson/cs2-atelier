@@ -26,6 +26,12 @@ for (const file of files) {
       /(src|href)="(\/[^"?]+\.(?:js|css))"/g,
       '$1="$2?v=' + version + '"',
     );
+    // Version internal navigation too: old HTML may still be fresh in a visitor's
+    // browser from a previous release. Canonical URLs remain query-free.
+    html = html.replace(
+      /href="(\/(?:market|studio|account)?)(#[^"]*)?"/g,
+      (_, route, fragment = "") => `href="${route}?v=${version}${fragment}"`,
+    );
     html = html
       .replaceAll("Saved on this computer.", "Saved in this browser.")
       .replaceAll("on this computer", "in this browser")
