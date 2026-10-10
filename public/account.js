@@ -1,3 +1,4 @@
+import { hosted, hostedRequest } from "./hosted.js";
 import {
   validateLibrary,
   validateWishlist,
@@ -12,6 +13,7 @@ let auth,
   changedIdentity = false;
 export const account = { user: null, configured: false, error: null };
 export async function localRequest(url, body) {
+  if (hosted) return hostedRequest(url, body);
   const response = await fetch(
     url,
     body === undefined
@@ -50,7 +52,7 @@ export const ready = (async () => {
     authSdk.onAuthStateChanged(auth, (user) => {
       if ((user?.uid ?? null) !== initialUid) {
         changedIdentity = true;
-        document.dispatchEvent(new CustomEvent("atelier-account-changed"));
+        document.dispatchEvent(new CustomEvent("cskit-account-changed"));
       }
     });
   } catch (e) {
@@ -67,7 +69,9 @@ export const ready = (async () => {
       (el) =>
         (el.textContent = account.user
           ? "Saved to your account."
-          : "Saved on this computer."),
+          : hosted
+            ? "Saved in this browser."
+            : "Saved on this computer."),
     );
   return account;
 })();
@@ -82,7 +86,11 @@ function session() {
     );
 }
 export function storageLabel() {
-  return account.user ? "Saved to your account" : "Saved on this computer";
+  return account.user
+    ? "Saved to your account"
+    : hosted
+      ? "Saved in this browser"
+      : "Saved on this computer";
 }
 export async function signIn() {
   await ready;
@@ -237,7 +245,7 @@ export async function exportBackup() {
   );
   const a = document.createElement("a");
   a.href = url;
-  a.download = "atelier-backup.json";
+  a.download = "cskit-backup.json";
   a.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }

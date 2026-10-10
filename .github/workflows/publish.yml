@@ -1,0 +1,30 @@
+name: Publish CSKit
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  id-token: write
+concurrency:
+  group: cskit-production
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm test
+      - run: node scripts/market-feed.mjs
+      - run: npm run build
+      - uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: projects/345561783504/locations/global/workloadIdentityPools/cskit-github/providers/github
+          service_account: cskit-publisher@atelier-cs2-hub.iam.gserviceaccount.com
+      - run: npx firebase deploy --only hosting --project atelier-cs2-hub --non-interactive

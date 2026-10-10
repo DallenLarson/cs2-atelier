@@ -20,7 +20,7 @@ test("clean profile exports no setting or bind overrides", () => {
       .split("\r\n")
       .filter((l) => l && !l.startsWith("//"))
       .join("\n"),
-    'echo "Atelier Loadout Studio loaded"',
+    'echo "CSKit Loadout Studio loaded"',
   );
   assert.ok(!cfg.replaceAll("\r\n", "").includes("\n"));
 });
@@ -104,10 +104,10 @@ test("schema errors preserve an explicit failure and input length is bounded", (
 });
 test("diagnosis prioritizes loading errors over completion marker", () => {
   assert.match(
-    diagnose("Unknown command: thing\nAtelier Loadout Studio loaded"),
+    diagnose("Unknown command: thing\nCSKit Loadout Studio loaded"),
     /unsupported/,
   );
   assert.match(diagnose("couldn't exec autoexec.cfg"), /could not find/);
-  assert.match(diagnose("Atelier Loadout Studio loaded"), /does not prove/);
+  assert.match(diagnose("CSKit Loadout Studio loaded"), /does not prove/);
   assert.match(diagnose(""), /cannot inspect/);
 });

@@ -680,7 +680,11 @@
   background: #dfe8f2;
   border-radius: 15px;
   color: #6482a6;
-  font: italic 39px Georgia;
+  font:
+    600 33px -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
   margin-bottom: 23px;
 }
 .profile-name-card label {

@@ -192,7 +192,7 @@ const server = http.createServer(async (req, res) => {
     if (req.method === "GET" && url.pathname === "/api/export") {
       res.setHeader(
         "Content-Disposition",
-        'attachment; filename="cs2-atelier-backup.json"',
+        'attachment; filename="cs2-cskit-backup.json"',
       );
       return send(res, 200, {
         ...state,
@@ -301,6 +301,7 @@ const server = http.createServer(async (req, res) => {
       "/account": "hub.html",
       "/market": "index.html",
       "/hub.js": "hub.js",
+      "/hosted.js": "hosted.js",
       "/hub.css": "hub.css",
       "/account.js": "account.js",
       "/account-core.js": "account-core.js",
@@ -336,7 +337,7 @@ const server = http.createServer(async (req, res) => {
   }
 });
 server.listen(port, "127.0.0.1", () => {
-  console.log(`CS2 Atelier: http://127.0.0.1:${port}`);
+  console.log(`CS2 CSKit: http://127.0.0.1:${port}`);
   void refresh();
   void updateArtwork();
   setInterval(() => void refresh(), 15000);

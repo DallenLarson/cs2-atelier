@@ -1,3 +1,4 @@
+import { hosted } from "./hosted.js";
 import { request as api, exportBackup, ready, account } from "./account.js";
 const $ = (s) => document.querySelector(s),
   money = (n) =>
@@ -109,7 +110,7 @@ async function sync() {
       await render();
     } else if (view === "wishlist") await render();
   } catch (e) {
-    $("#status").textContent = "Local app disconnected";
+    $("#status").textContent = "Connection interrupted";
     $("#status-dot").className = "offline";
     $("#notice").hidden = false;
     $("#notice").textContent =
@@ -169,7 +170,9 @@ async function save(name, remove = false, target) {
         ? "Removed from your wishlist"
         : account.user
           ? "Saved to your account"
-          : "Saved on this computer",
+          : hosted
+            ? "Saved in this browser"
+            : "Saved on this computer",
     );
   } catch (e) {
     toast(e.message);
@@ -180,7 +183,7 @@ async function detail(item) {
   selected = item;
   const w = wished(item.market_hash_name);
   $("#detail-body").innerHTML =
-    `${item.image ? `<div class="detail-stage" style="--rarity:${item.rarity}"><div class="stage-orbit"></div><img class="detail-art" src="${esc(item.image)}&amp;size=large" width="1024" height="768" alt="${esc(names(item.market_hash_name).title)}"><span class="stage-caption">${esc(names(item.market_hash_name).wear)}</span></div>` : ""}<div class="detail-kicker">${esc(names(item.market_hash_name).wear)} · Skinport</div><h2 class="detail-title">${esc(names(item.market_hash_name).title)}</h2><div class="detail-price">${money(item.min_price)}</div><div class="detail-muted">Lowest tradable listing · ${item.quantity.toLocaleString()} available</div><div id="history" class="detail-muted">Loading your local price history…</div><form class="target-form" id="target-form"><label for="target-input">Your target price (USD)</label><input id="target-input" type="number" min="0.01" step="0.01" placeholder="No target" value="${w?.target ?? ""}"><button class="primary" type="submit">Save to wishlist</button></form><p class="detail-muted">An empty target keeps the item on your wishlist without a price target.</p><div class="detail-actions"><a id="market-link" target="_blank" rel="noreferrer">View on Skinport</a>${w ? '<button id="remove-item" class="text-button">Remove from wishlist</button>' : ""}</div>`;
+    `${item.image ? `<div class="detail-stage" style="--rarity:${item.rarity}"><div class="stage-orbit"></div><img class="detail-art" src="${esc(item.imageLarge || (hosted ? item.image : item.image + "&size=large"))}" width="1024" height="768" alt="${esc(names(item.market_hash_name).title)}"><span class="stage-caption">${esc(names(item.market_hash_name).wear)}</span></div>` : ""}<div class="detail-kicker">${esc(names(item.market_hash_name).wear)} · Skinport</div><h2 class="detail-title">${esc(names(item.market_hash_name).title)}</h2><div class="detail-price">${money(item.min_price)}</div><div class="detail-muted">Lowest tradable listing · ${item.quantity.toLocaleString()} available</div><div id="history" class="detail-muted">Loading your local price history…</div><form class="target-form" id="target-form"><label for="target-input">Your target price (USD)</label><input id="target-input" type="number" min="0.01" step="0.01" placeholder="No target" value="${w?.target ?? ""}"><button class="primary" type="submit">Save to wishlist</button></form><p class="detail-muted">An empty target keeps the item on your wishlist without a price target.</p><div class="detail-actions"><a id="market-link" target="_blank" rel="noreferrer">View on Skinport</a>${w ? '<button id="remove-item" class="text-button">Remove from wishlist</button>' : ""}</div>`;
   const link = new URL(item.item_page);
   if (link.protocol === "https:" && link.hostname === "skinport.com")
     $("#market-link").href = link.href;
@@ -212,9 +215,10 @@ async function detail(item) {
     if (selected !== item) return;
     const h = data.history;
     if (h.length < 2) {
-      $("#history").innerHTML = account.user
-        ? '<p class="detail-muted">Account wishlists sync across devices. Price-history charts are currently available in the local guest tracker only.</p>'
-        : '<p class="detail-muted">Your price history starts when you save this item. A chart appears after two automatic updates.</p>';
+      $("#history").innerHTML =
+        account.user || hosted
+          ? '<p class="detail-muted">Account wishlists sync across devices. Price-history charts are available in the desktop tracker; this page shows the latest market snapshot.</p>'
+          : '<p class="detail-muted">Your price history starts when you save this item. A chart appears after two automatic updates.</p>';
       return;
     }
     const min = Math.min(...h.map((p) => p.price)),
@@ -312,9 +316,11 @@ $("#refresh").onclick = async () => {
   try {
     const data = await api("/api/refresh", {});
     toast(
-      data.busy
-        ? "Updating market prices…"
-        : "Prices refresh every five minutes. Next update " +
+      data.message
+        ? data.message
+        : data.busy
+          ? "Updating market prices…"
+          : "Prices refresh every five minutes. Next update " +
             new Date(data.nextRefresh).toLocaleTimeString([], {
               hour: "2-digit",
               minute: "2-digit",

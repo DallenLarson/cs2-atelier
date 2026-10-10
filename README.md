@@ -1,26 +1,26 @@
 <div align="center">
 
-# Atelier
+# CSKit
 
 ### Your game. All together.
 
 A lightweight CS2 Hub with a market tracker, personal wishlist, Loadout Studio, and optional Google accounts through Firebase.
 
-**Guest mode · Google sign-in · Private account storage · No build step**
+**[Open CSKit.site](https://cskit.site) · Google sign-in · Private account storage · Loadout Studio**
 
 </div>
 
-![Atelier Hub preview](docs/hub-preview.png)
+![CSKit Hub preview](docs/cskit-preview.jpg)
 
 ## One workspace for your game
 
-The new overview brings Market, Wishlist, and Loadout Studio together. **Continue with Google** signs in or creates an account without a new password. When Firebase is configured, wishlists and builds are saved to your own Firestore documents. Guest work stays on the local computer.
+The new overview brings Market, Wishlist, and Loadout Studio together. **Continue with Google** signs in or creates an account without a new password. When Firebase is configured, wishlists and builds are saved to your own Firestore documents. On the website, guest work stays in your own browser. The optional desktop server keeps its original local JSON storage.
 
 Existing data is never uploaded automatically: after signing in, use **Bring local data to my account** to copy your guest wishlist and builds. Cloud entries win on duplicates, and local originals remain intact.
 
-See [Firebase setup, storage, and hosting boundaries](docs/FIREBASE.md). This remains a locally served app connected to Firebase, not a publicly hosted multi-user site. New clones run in guest mode until a Firebase web configuration is supplied.
+The public app runs on Firebase Hosting with automatic HTTPS. [Deployment and domain setup](docs/DEPLOYMENT.md) · [Firebase accounts and storage](docs/FIREBASE.md). New desktop clones run in guest mode until a Firebase web configuration is supplied.
 
-![Atelier market preview](docs/preview.png)
+![CSKit market preview](docs/cskit-market.jpg)
 
 _Actual app screenshot. Prices shown are a snapshot, not current quotes._
 
@@ -29,9 +29,9 @@ _Actual app screenshot. Prices shown are a snapshot, not current quotes._
 - Search skins, cases, stickers, and more; filter categories and sort prices.
 - Save a wishlist, set target prices, and see when listings meet your targets.
 - Explore transparent artwork with hover tilt, soft shadows, and floating HD previews.
-- Build local price-history charts, retaining up to 90 days of observations.
-- Refresh Skinport prices every five minutes, even with the browser closed.
-- Keep wishlist, targets, price history, and downloaded images on your computer.
+- Browse the latest public market snapshot; the optional desktop tracker also keeps up to 90 days of local price observations.
+- Refresh the public Skinport feed through a scheduled GitHub job, requested every five minutes. GitHub scheduling and CDN caching can delay updates; the UI shows snapshot time and flags stale prices.
+- Save guest wishlist and builds in your browser, or sync them privately using Google sign-in.
 
 Responsive layouts support smaller windows. Reduced-motion preferences disable animation.
 
@@ -39,11 +39,11 @@ Responsive layouts support smaller windows. Reduced-motion preferences disable a
 
 Open **Loadout Studio** in the sidebar to create a personal CS2 settings profile in the same calm workspace.
 
-![Atelier Loadout Studio](docs/studio-preview.png)
+![CSKit Loadout Studio](docs/cskit-studio.jpg)
 
 - Nine steps cover a starting point, profile name, weapon placement, crosshair, sensitivity, radar/HUD, brightness/audio, keybinds, and export.
 - Every setting starts at **Keep current**. Only explicit overrides enter your `autoexec.cfg`; zero is a real value.
-- Save multiple profiles locally, duplicate them, undo edits, and import/export Studio JSON or recognized config commands.
+- Save multiple profiles, duplicate them, undo edits, and import/export Studio JSON or recognized config commands.
 - Preview relative weapon placement, crosshair shape, HUD color, radar, and brightness. Previews are illustrative 2D layouts, not an exact first-person CS2 renderer; untouched settings use reference values.
 - Review changes, download a config, follow installation instructions, and check pasted console output for common loading errors.
 
@@ -53,7 +53,11 @@ Command support is a curated snapshot checked **October 9, 2026** against the [S
 
 Pro-inspired choices are seven-field aim/viewmodel snapshots from [ProSettings](https://prosettings.net/), with links in the app. They are partial reported settings, not endorsements or verified current configurations. Observed October 9; source pages displayed October 10, 2026, an unresolved date discrepancy disclosed in the UI. Custom edits take precedence.
 
-## Quick start
+## Publish updates
+
+Push to `main` to run tests, build, and deploy Firebase Hosting through the **Publish CSKit** workflow. GitHub authenticates with a short-lived, repository-and-branch-restricted identity; no service-account key is stored. The separate **Refresh market feed** workflow updates public market data without redeploying the website.
+
+## Desktop quick start
 
 Install [Node.js 22 or newer](https://nodejs.org/), then:
 

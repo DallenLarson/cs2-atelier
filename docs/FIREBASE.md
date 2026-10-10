@@ -1,8 +1,8 @@
 # Firebase accounts
 
-Atelier has a Hub overview, Google sign-in, and separate private account storage for wishlists and Studio builds. Guest mode continues using the original local JSON files. Sign-in and sign-up share one **Continue with Google** button.
+CSKit has a Hub overview, Google sign-in, and separate private account storage for wishlists and Studio builds. The public site uses browser-local guest storage. The optional desktop server continues using its original local JSON files. Sign-in and sign-up share one **Continue with Google** button.
 
-The current local installation connects to `atelier-cs2-hub`. Google sign-in is enabled, the Firestore database is in `nam5`, and the included security rules are deployed. No billing account was linked. The actual web configuration lives in ignored `data/firebase-config.json`; no administrative credential is served to the browser or committed.
+The current local installation connects to `atelier-cs2-hub`. Google sign-in is enabled, the Firestore database is in `nam5`, and the included security rules are deployed. No billing account was linked. Public SDK identifiers are tracked in `firebase-web.json` for reproducible hosting builds. Desktop overrides remain in ignored `data/firebase-config.json`. SDK identifiers are not administrative credentials; private access is enforced by Firestore rules. No administrative key is served to the browser or committed.
 
 ## Connecting another installation
 
@@ -16,7 +16,7 @@ The current local installation connects to `atelier-cs2-hub`. Google sign-in is 
    npx firebase deploy --only firestore:rules --project YOUR_PROJECT_ID
    ```
 
-5. Start Atelier and use **Continue with Google** in a normal browser. Allow the Google popup. Embedded browsers can restrict OAuth popups; if the popup does not appear, open the local address in Chrome, Edge, or Safari.
+5. Start CSKit and use **Continue with Google** in a normal browser. Allow the Google popup. Embedded browsers can restrict OAuth popups; if the popup does not appear, open the local address in Chrome, Edge, or Safari.
 
 An absent configuration leaves Google sign-in disabled. A failed configured connection blocks account writes; it does not silently save account data to a guest workspace.
 
@@ -34,7 +34,7 @@ An absent configuration leaves Google sign-in disabled. A failed configured conn
 
 ## Hosting boundary
 
-This release connects the existing **local** app to Firebase; it does not publish the Node server to the internet. It still binds to loopback and keeps local guest APIs. Do not expose that server publicly as a multi-user backend: guest data is shared on that computer. Public Hub hosting needs a separate market-data service and browser-specific guest storage. Firebase account records already have user isolation.
+The public site is a separate static build on Firebase Hosting. Guest writes use browser localStorage with Web Locks and Studio revision checks. Account writes use private per-user Firestore documents. Market data is a public read-only snapshot updated by GitHub Actions. The Node desktop server still binds to loopback; do not expose its computer-shared guest endpoints publicly. See [deployment](DEPLOYMENT.md).
 
 ## Verification
 

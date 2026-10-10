@@ -1,3 +1,4 @@
+import { artworkUrl } from "./hosted.js";
 import { request, storageLabel, ready } from "./account.js";
 import {
   REGISTRY,
@@ -287,13 +288,13 @@ function reviewContent() {
   )}</pre></details>`;
 }
 function installGuide() {
-  return "<ol><li>Back up your existing autoexec.</li><li>Steam → Counter-Strike 2 → Manage → Browse local files.</li><li>Save as <code>game\\csgo\\cfg\\autoexec.cfg</code>, not .cfg.txt.</li><li>Run <code>exec autoexec.cfg</code> in the CS2 console. Optionally add <code>+exec autoexec.cfg</code> to Steam launch options.</li><li>Look for <code>Atelier Loadout Studio loaded</code>, then query your changed commands.</li></ol><p>This app cannot detect in-game execution or verify live values.</p>";
+  return "<ol><li>Back up your existing autoexec.</li><li>Steam → Counter-Strike 2 → Manage → Browse local files.</li><li>Save as <code>game\\csgo\\cfg\\autoexec.cfg</code>, not .cfg.txt.</li><li>Run <code>exec autoexec.cfg</code> in the CS2 console. Optionally add <code>+exec autoexec.cfg</code> to Steam launch options.</li><li>Look for <code>CSKit Loadout Studio loaded</code>, then query your changed commands.</li></ol><p>This app cannot detect in-game execution or verify live values.</p>";
 }
 function content() {
   const cat = STEPS[step][0];
   if (cat === "start") return startContent();
   if (cat === "profile")
-    return `<div class="profile-name-card"><span class="profile-symbol">a</span><label for="build-name">Build name</label><input id="build-name" maxlength="60" value="${esc(profile.displayName)}" placeholder="My match-day setup"><p>${storageLabel()}. Autosaved as you edit. Export a profile JSON to move it to another device.</p></div><div class="studio-info-grid"><div><strong>Intentional by default.</strong><p>Nothing is applied to CS2 automatically. Only settings you choose are included in the download.</p></div><div><strong>Room to experiment.</strong><p>Duplicate a build before trying a new direction. Undo restores edits made during this session.</p></div></div>`;
+    return `<div class="profile-name-card"><span class="profile-symbol">⌘</span><label for="build-name">Build name</label><input id="build-name" maxlength="60" value="${esc(profile.displayName)}" placeholder="My match-day setup"><p>${storageLabel()}. Autosaved as you edit. Export a profile JSON to move it to another device.</p></div><div class="studio-info-grid"><div><strong>Intentional by default.</strong><p>Nothing is applied to CS2 automatically. Only settings you choose are included in the download.</p></div><div><strong>Room to experiment.</strong><p>Duplicate a build before trying a new direction. Undo restores edits made during this session.</p></div></div>`;
   if (cat === "weapon")
     return `<div class="quick-options">${pill("Near center", "weapon", "center")}${pill("Far edge", "weapon", "edge")}${pill("Low profile", "weapon", "low")}</div><p class="studio-note">Near center uses an inward offset (−2). CS2 has no separate center-handed mode. The item artwork illustrates direction, not a first-person viewmodel.</p>${fields(cat)}`;
   if (cat === "crosshair") return crossContent();
@@ -417,6 +418,7 @@ $("#step-content").addEventListener("change", (e) => {
       profile.binds[Number(t.dataset.bindConfirm)].confirmed = t.checked;
     });
   else if (t.id === "build-name") {
+    if (t.value.trim() === profile.displayName) return;
     if (!t.value.trim()) {
       t.value = profile.displayName;
       return;
@@ -433,6 +435,15 @@ $("#step-content").addEventListener("change", (e) => {
   }
 });
 $("#step-content").addEventListener("input", (e) => {
+  if (
+    e.target.id === "build-name" &&
+    e.target.value.trim() &&
+    e.target.value.trim() !== profile.displayName
+  ) {
+    mutate(() => (profile.displayName = e.target.value.trim()), false);
+    $("#profile-picker option:checked").textContent = profile.displayName;
+    return;
+  }
   const k =
     e.target.dataset.slider ||
     (e.target.type === "number" ? e.target.dataset.value : null);
@@ -592,7 +603,7 @@ $("#delete-profile").onclick = () => {
 };
 $("#export-json").onclick = () =>
   download(
-    "atelier-loadout.json",
+    "cskit-loadout.json",
     JSON.stringify(profile, null, 2),
     "application/json",
   );
@@ -812,13 +823,12 @@ function updatePreview() {
     $("#preview-label").textContent = "LOW OPACITY · MAY BE HARD TO SEE";
 }
 $("#preview-scene").onchange = updatePreview;
-$("#preview-weapon").onchange = (e) => {
+$("#preview-weapon").onchange = async (e) => {
   $("#studio-weapon").hidden = false;
   $("#weapon-fallback").hidden = true;
   $("#studio-weapon").alt =
     e.target.selectedOptions[0].textContent + " illustrative item artwork";
-  $("#studio-weapon").src =
-    "/api/artwork?name=" + encodeURIComponent(e.target.value) + "&size=large";
+  $("#studio-weapon").src = await artworkUrl(e.target.value, true);
 };
 $("#studio-weapon").onerror = () => {
   $("#studio-weapon").hidden = true;

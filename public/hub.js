@@ -1,3 +1,4 @@
+import { hosted } from "./hosted.js";
 import {
   account,
   ready,
@@ -38,7 +39,7 @@ async function action(button, fn) {
 $("#google-signin").onclick = () =>
   action($("#google-signin"), async () => {
     $("#account-note").textContent =
-      "Complete sign-in in the Google window. If it does not open here, use this local address in your normal browser.";
+      "Complete sign-in in the Google window. If it does not open here, open CSKit in your normal browser.";
     await signIn();
   });
 $("#signout").onclick = () => action($("#signout"), signOut);
@@ -46,8 +47,9 @@ $("#hub-export").onclick = () => action($("#hub-export"), exportBackup);
 $("#import-local").onclick = () =>
   action($("#import-local"), async () => {
     await importLocal();
-    $("#account-note").textContent =
-      "Local wishlist and builds copied. Originals remain on this computer.";
+    $("#account-note").textContent = hosted
+      ? "Guest wishlist and builds copied. Originals remain in this browser."
+      : "Local wishlist and builds copied. Originals remain on this computer.";
     await counts();
   });
 async function counts() {
@@ -94,7 +96,7 @@ if (account.error) {
     : "Google sign-in is not connected yet. Guest tools are ready now.";
   await counts();
 }
-document.addEventListener("atelier-account-changed", () => {
+document.addEventListener("cskit-account-changed", () => {
   if (!document.hidden)
     $("#hub-status").textContent = "Account changed · refresh this page";
 });

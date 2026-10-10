@@ -611,7 +611,7 @@ export function generateConfig(p) {
   if (errors.length) throw Error(errors.join("\n"));
   const name = p.displayName.replace(/[^\p{L}\p{N} ._-]/gu, "").slice(0, 60);
   const lines = [
-    `// Atelier Loadout Studio — ${name}`,
+    `// CSKit Loadout Studio — ${name}`,
     `// Registry ${REGISTRY_VERSION} | Schema 1`,
     `// Only explicitly selected overrides. Back up your existing config.`,
     ...(p.basePresetId
@@ -636,7 +636,7 @@ export function generateConfig(p) {
       "// EXPLICIT KEY OVERRIDES",
       ...p.binds.map((b) => `bind "${b.key}" "${b.action}"`),
     );
-  lines.push("", 'echo "Atelier Loadout Studio loaded"', "");
+  lines.push("", 'echo "CSKit Loadout Studio loaded"', "");
   return lines.join("\r\n");
 }
 export function importConfig(text, base = freshProfile()) {
@@ -758,7 +758,10 @@ export function diagnose(text) {
     return "CS2 could not find or read the config. Check game/csgo/cfg, the filename autoexec.cfg (not .cfg.txt), then run exec autoexec.cfg.";
   if (/unknown command|invalid convar/i.test(text))
     return "The log contains an unsupported command. Compare the command name with the review list; a game update or another config may be responsible. No in-game values have been verified.";
-  if (text.includes("Atelier Loadout Studio loaded"))
+  if (
+    text.includes("CSKit Loadout Studio loaded") ||
+    text.includes("Atelier Loadout Studio loaded")
+  )
     return "The expected marker appears in this pasted log. This suggests execution reached the end; it does not prove individual values applied. Query the changed commands below in CS2.";
   return "No Studio marker or recognized loading error found. Run exec autoexec.cfg and paste the resulting console output. The app cannot inspect the game process.";
 }

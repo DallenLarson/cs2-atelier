@@ -1,0 +1,23 @@
+name: Refresh market feed
+on:
+  schedule:
+    - cron: "3-58/5 * * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: market-feed
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: node scripts/market-feed.mjs
+      - run: node scripts/publish-feed.mjs
+        env:
+          GH_TOKEN: ${{ github.token }}
