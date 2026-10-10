@@ -869,4 +869,4 @@ async function init() {
 }
 await ready;
 if (await ensureWorkspace()) init();
-else location.assign("/");
+else location.assign("/" + location.search);

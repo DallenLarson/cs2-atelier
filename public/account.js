@@ -98,12 +98,12 @@ export async function signIn() {
   const provider = new authSdk.GoogleAuthProvider();
   provider.setCustomParameters({ prompt: "select_account" });
   await authSdk.signInWithPopup(auth, provider);
-  location.assign(location.pathname + location.hash);
+  location.assign(location.pathname + location.search + location.hash);
 }
 export async function signOut() {
   await ready;
   await authSdk.signOut(auth);
-  location.assign("/");
+  location.assign("/" + location.search);
 }
 function ref(kind) {
   session();
