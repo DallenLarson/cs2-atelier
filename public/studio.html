@@ -135,55 +135,81 @@
         <section class="preview-panel" aria-label="Live preview">
           <div class="preview-top">
             <span id="preview-label">YOUR SETUP</span
-            ><span class="approx-badge">ILLUSTRATION</span>
+            ><span class="approx-badge">FIRST PERSON</span>
           </div>
           <div class="studio-scene" id="studio-scene">
-            <div class="scene-grid"></div>
+            <div class="scene-world"></div>
+            <div class="weapon-anchor" id="weapon-anchor">
+              <img
+                id="studio-weapon"
+                src="/studio-pistol.png"
+                alt="First-person pistol and gloved hands"
+                draggable="false"
+              /><span id="weapon-fallback" hidden
+                >Weapon image unavailable</span
+              >
+            </div>
             <canvas
               id="radar-canvas"
               width="200"
               height="200"
-              aria-label="Illustrative radar"
+              aria-label="Dust II radar with a fixed sample player position"
             ></canvas>
-            <div class="weapon-anchor" id="weapon-anchor">
-              <img
-                id="studio-weapon"
-                src="/api/artwork?name=AK-47%20%7C%20Redline%20(Field-Tested)&size=large"
-                alt="AK-47 item artwork, used only to illustrate relative position"
-              /><span id="weapon-fallback" hidden>Weapon position</span>
-            </div>
             <canvas
               id="crosshair-canvas"
-              aria-label="Illustrative crosshair"
+              aria-label="Crosshair at the selected authoring resolution"
             ></canvas>
-            <div class="sample-hud" id="sample-hud">
-              <span>100 <small>HP</small></span
-              ><span>12 : 9</span><span>30 <small>/ 90</small></span>
+            <div class="sample-hud" id="sample-hud" aria-hidden="true">
+              <div class="hud-score">
+                <span>0</span><b>1:55</b><span>0</span>
+              </div>
+              <span class="hud-location">Bombsite B</span>
+              <span class="hud-cash">$10000</span>
+              <span class="hud-health"><small>♢ 100</small> 100 <i></i></span>
+              <span class="hud-team">CT</span>
+              <span class="hud-ammo">7 <small>/ 35</small></span>
+              <span class="hud-inventory"
+                >1 &nbsp; Desert Eagle<br /><small>3 &nbsp; Knife</small></span
+              >
             </div>
           </div>
           <div class="preview-options">
-            <label for="preview-weapon">Artwork</label
-            ><select id="preview-weapon">
-              <option value="AK-47 | Redline (Field-Tested)">AK-47</option>
-              <option value="M4A1-S | Printstream (Field-Tested)">
-                M4A1-S
-              </option>
-              <option value="AWP | Asiimov (Field-Tested)">AWP</option>
-              <option value="Desert Eagle | Printstream (Field-Tested)">
-                Desert Eagle
-              </option></select
-            ><label for="preview-scene" class="sr-only"
-              >Preview background</label
+            <label for="preview-scene">Scene</label
             ><select id="preview-scene">
-              <option value="slate">Slate</option>
-              <option value="light">Bright</option>
-              <option value="green">Foliage tones</option>
+              <option value="dust2">Dust II · B site</option>
+              <option value="light">Bright studio</option>
+              <option value="slate">Dark studio</option>
             </select>
+            <button
+              type="button"
+              class="text-button"
+              id="preview-expand"
+              aria-expanded="false"
+            >
+              Expand preview
+            </button>
+          </div>
+          <div class="preview-options preview-tuning">
+            <label for="preview-roll">Pose tilt</label
+            ><input
+              id="preview-roll"
+              type="range"
+              min="-15"
+              max="15"
+              value="0"
+              step="1"
+            /><output id="preview-roll-value" for="preview-roll">0°</output>
+            <label><input id="preview-hud" type="checkbox" checked /> HUD</label
+            ><button class="text-button" id="preview-reset" type="button">
+              Reset view
+            </button>
           </div>
           <p class="preview-disclaimer">
-            Illustrative 2D layout, not a first-person game capture. Untouched
-            fields use preview values, not your current in-game settings. Final
-            rendering depends on CS2 and your display.
+            16:9 reference preview · Your map and transparent first-person
+            cutout. Crosshair dimensions scale with authoring resolution.
+            Viewmodel depth, gamma and radar are approximations; recoil, spread
+            and 3D geometry require CS2. Pose tilt is preview-only. Untouched
+            settings use preview defaults.
           </p>
           <div id="preview-readout" class="preview-readout"></div>
           <div class="preview-summary">

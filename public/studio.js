@@ -1,4 +1,4 @@
-import { artworkUrl } from "./hosted.js";
+import { viewmodelPose, crosshairGeometry } from "./studio-preview.js";
 import { request, storageLabel, ready, ensureWorkspace } from "./account.js";
 import {
   REGISTRY,
@@ -296,7 +296,7 @@ function content() {
   if (cat === "profile")
     return `<div class="profile-name-card"><span class="profile-symbol">⌘</span><label for="build-name">Build name</label><input id="build-name" maxlength="60" value="${esc(profile.displayName)}" placeholder="My match-day setup"><p>${storageLabel()}. Autosaved as you edit. Export a profile JSON to move it to another device.</p></div><div class="studio-info-grid"><div><strong>Intentional by default.</strong><p>Nothing is applied to CS2 automatically. Only settings you choose are included in the download.</p></div><div><strong>Room to experiment.</strong><p>Duplicate a build before trying a new direction. Undo restores edits made during this session.</p></div></div>`;
   if (cat === "weapon")
-    return `<div class="quick-options">${pill("Near center", "weapon", "center")}${pill("Far edge", "weapon", "edge")}${pill("Low profile", "weapon", "low")}</div><p class="studio-note">Near center uses an inward offset (−2). CS2 has no separate center-handed mode. The item artwork illustrates direction, not a first-person viewmodel.</p>${fields(cat)}`;
+    return `<div class="quick-options">${pill("Near center", "weapon", "center")}${pill("Far edge", "weapon", "edge")}${pill("Low profile", "weapon", "low")}</div><p class="studio-note">Near center uses an inward offset (−2). CS2 has no separate center-handed mode. The cutout previews relative positioning; CS2 renders the actual 3D viewmodel.</p>${fields(cat)}`;
   if (cat === "crosshair") return crossContent();
   if (cat === "aim")
     return `<div class="dpi-card"><label for="dpi">Mouse DPI <span>INFORMATIONAL</span></label><input id="dpi" type="number" min="50" max="100000" value="${profile.dpi}"><div id="edpi"></div><p>Set hardware DPI in your mouse software. It is never exported.</p></div>${fields(cat)}`;
@@ -684,17 +684,16 @@ function drawCrosshair() {
     w = box.width || 400,
     h = box.height || 320,
     ctx = setupCanvas(canvas, w, h),
-    scale = 2.2;
-  const l = Math.min(value("cl_crosshair_length"), 50) * scale,
-    g = Math.max(0, Math.min(80, value("cl_crosshair_gap"))) * scale + 3,
-    t = Math.max(1, Math.min(20, value("cl_crosshair_thickness")) * scale),
+    geometry = crosshairGeometry(h, value);
+  const { length: l, gap: g, thickness: t, scale } = geometry,
     x = w / 2,
     y = h / 2;
-  ctx.fillStyle = `rgba(${value("cl_crosshaircolor_r")},${value("cl_crosshaircolor_g")},${value("cl_crosshaircolor_b")},${value("cl_crosshaircolor_a") / 255})`;
+  ctx.globalAlpha = value("cl_crosshaircolor_a") / 255;
+  ctx.fillStyle = `rgba(${value("cl_crosshaircolor_r")},${value("cl_crosshaircolor_g")},${value("cl_crosshaircolor_b")},1)`;
   const rect = (a, b, c, d) => {
     if (value("cl_crosshair_drawoutline")) {
       ctx.strokeStyle = "#101922";
-      ctx.lineWidth = value("cl_crosshair_drawoutline") === 2 ? 1 : 2;
+      ctx.lineWidth = (value("cl_crosshair_drawoutline") === 2 ? 1 : 2) * scale;
       ctx.strokeRect(a, b, c, d);
     }
     ctx.fillRect(a, b, c, d);
@@ -708,60 +707,46 @@ function drawCrosshair() {
   if (value("cl_crosshairdot") || value("cl_crosshairstyle") === 6)
     rect(x - t / 2, y - t / 2, t, t);
 }
+const radarImage = new Image();
+radarImage.onload = () => {
+  if (profile) drawRadar();
+};
+radarImage.src = "/studio-dust2-radar.png";
 function drawRadar() {
   const c = $("#radar-canvas"),
-    ctx = setupCanvas(c, 180, 180);
+    ctx = setupCanvas(c, 200, 200);
+  // Fixed approximate B-site position; no live game telemetry.
+  const size = (180 * value("cl_radar_scale")) / 0.4;
+  const px = -0.27 * size,
+    py = -0.29 * size;
   ctx.save();
   ctx.beginPath();
-  ctx.arc(90, 90, 80, 0, Math.PI * 2);
+  ctx.arc(100, 100, 96, 0, Math.PI * 2);
   ctx.clip();
-  ctx.fillStyle = "#253d48";
-  ctx.fillRect(0, 0, 180, 180);
-  ctx.translate(90, 90);
-  ctx.rotate(value("cl_radar_rotate") ? -0.4 : 0);
-  const zoom = value("cl_radar_scale") * 2;
-  ctx.scale(zoom, zoom);
-  if (!value("cl_radar_always_centered")) ctx.translate(14, -12);
-  ctx.strokeStyle = "#56727c";
-  ctx.lineWidth = 17;
-  ctx.lineJoin = "round";
+  ctx.fillStyle = "#171d24bb";
+  ctx.fillRect(0, 0, 200, 200);
+  ctx.translate(100, 100);
+  ctx.rotate(value("cl_radar_rotate") ? Math.PI * 0.32 : 0);
+  if (value("cl_radar_always_centered")) ctx.translate(-px, -py);
+  if (radarImage.complete && radarImage.naturalWidth)
+    ctx.drawImage(radarImage, -size / 2, -size / 2, size, size);
+  ctx.fillStyle = "#54e8ed";
   ctx.beginPath();
-  ctx.moveTo(-75, 55);
-  ctx.lineTo(-75, -40);
-  ctx.lineTo(-20, -40);
-  ctx.lineTo(-20, -75);
-  ctx.lineTo(60, -75);
-  ctx.lineTo(60, 10);
-  ctx.lineTo(10, 10);
-  ctx.lineTo(10, 60);
-  ctx.closePath();
-  ctx.stroke();
-  ctx.fillStyle = "#344f5a";
-  ctx.fillRect(-44, -16, 28, 40);
-  ctx.fillStyle = "#d8b873";
-  ctx.font = "bold 16px system-ui";
-  ctx.fillText("A", -72, -38);
-  ctx.fillText("B", 44, -40);
-  const colors = ["#86d7ea", "#b6a0e7", "#eac785"];
-  [
-    [-60, 25],
-    [40, -55],
-    [0, 50],
-  ].forEach(([x, y], i) => {
-    ctx.fillStyle = colors[i];
-    ctx.beginPath();
-    ctx.arc(x, y, 5 * value("cl_radar_icon_scale_min"), 0, Math.PI * 2);
-    ctx.fill();
-  });
-  ctx.restore();
-  ctx.fillStyle = "#fff";
-  ctx.beginPath();
-  ctx.moveTo(90, 82);
-  ctx.lineTo(85, 96);
-  ctx.lineTo(95, 96);
-  ctx.closePath();
+  ctx.arc(px, py, 4 * value("cl_radar_icon_scale_min"), 0, Math.PI * 2);
   ctx.fill();
-  c.style.width = 115 * value("cl_hud_radar_scale") + "px";
+  ctx.strokeStyle = "#9cddeba0";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.arc(px, py, 16, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.restore();
+  ctx.strokeStyle = "#a3ccea88";
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.arc(100, 100, 96, 0, Math.PI * 2);
+  ctx.stroke();
+  c.style.width =
+    $("#studio-scene").clientWidth * 0.16 * value("cl_hud_radar_scale") + "px";
   c.style.height = c.style.width;
 }
 function updatePreview() {
@@ -775,12 +760,18 @@ function updatePreview() {
     STEPS[step][1].toUpperCase() + " · LIVE PREVIEW";
   const hand = value("cl_prefer_lefthanded") === 1;
   const anchor = $("#weapon-anchor");
-  anchor.style.left =
-    (hand ? 25 : 75) +
-    (hand ? -1 : 1) * (value("viewmodel_offset_x") - 1) * 5 +
-    "%";
-  anchor.style.bottom = 18 + value("viewmodel_offset_z") * 5 + "%";
-  anchor.style.transform = `translateX(-50%) scale(${1 + (value("viewmodel_fov") - 60) * 0.02 + value("viewmodel_offset_y") * 0.035}) scaleX(${hand ? -1 : 1})`;
+  const pose = viewmodelPose(value);
+  anchor.style.left = pose.left + "%";
+  anchor.style.bottom = pose.bottom + "%";
+  anchor.style.transform = `translateX(-50%) scale(${pose.scale}) scaleX(${hand ? -1 : 1}) rotate(${$("#preview-roll").value}deg)`;
+  $("#studio-scene").style.setProperty(
+    "--hud-scale",
+    value("hud_scaling") / 0.9,
+  );
+  $("#studio-scene").style.setProperty(
+    "--scene-unit",
+    $("#studio-scene").clientWidth / 100 + "px",
+  );
   $("#studio-scene").style.setProperty(
     "--brightness",
     Math.pow(2.2 / value("r_fullscreen_gamma"), 0.8),
@@ -801,7 +792,8 @@ function updatePreview() {
     "#f1b7da",
     "#dbe7f2",
   ][value("cl_hud_color")];
-  $("#sample-hud").style.fontSize = 17 * value("hud_scaling") + "px";
+  $("#sample-hud").hidden = !$("#preview-hud").checked;
+  $("#radar-canvas").hidden = !$("#preview-hud").checked;
   drawCrosshair();
   drawRadar();
   $("#preview-readout").innerHTML =
@@ -823,21 +815,38 @@ function updatePreview() {
     $("#preview-label").textContent = "LOW OPACITY · MAY BE HARD TO SEE";
 }
 $("#preview-scene").onchange = updatePreview;
-$("#preview-weapon").onchange = async (e) => {
-  $("#studio-weapon").hidden = false;
-  $("#weapon-fallback").hidden = true;
-  $("#studio-weapon").alt =
-    e.target.selectedOptions[0].textContent + " illustrative item artwork";
-  $("#studio-weapon").src = await artworkUrl(e.target.value, true);
+$("#preview-roll").oninput = () => {
+  $("#preview-roll-value").textContent = $("#preview-roll").value + "°";
+  updatePreview();
 };
+$("#preview-hud").onchange = updatePreview;
+$("#preview-reset").onclick = () => {
+  $("#preview-roll").value = 0;
+  $("#preview-roll-value").textContent = "0°";
+  $("#preview-scene").value = "dust2";
+  $("#preview-hud").checked = true;
+  updatePreview();
+};
+function expandPreview(expanded) {
+  $(".preview-panel").classList.toggle("preview-expanded", expanded);
+  $("#preview-expand").setAttribute("aria-expanded", String(expanded));
+  $("#preview-expand").textContent = expanded
+    ? "Close expanded preview"
+    : "Expand preview";
+  updatePreview();
+}
+$("#preview-expand").onclick = () =>
+  expandPreview(!$(".preview-panel").classList.contains("preview-expanded"));
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") expandPreview(false);
+});
 $("#studio-weapon").onerror = () => {
   $("#studio-weapon").hidden = true;
   $("#weapon-fallback").hidden = false;
 };
 new ResizeObserver(() => {
   if (profile) {
-    drawCrosshair();
-    drawRadar();
+    updatePreview();
   }
 }).observe($("#studio-scene"));
 async function init() {

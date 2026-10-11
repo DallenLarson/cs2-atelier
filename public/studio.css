@@ -1278,3 +1278,182 @@
     transition: none !important;
   }
 }
+/* Reference-based first-person composition. HUD coordinates stay independent of pose. */
+.studio-scene {
+  height: auto;
+  aspect-ratio: 16 / 9;
+  filter: none;
+  background: #30353c;
+}
+.scene-world {
+  position: absolute;
+  inset: 0;
+  background: url("/studio-dust2.jpg") center center / cover;
+  filter: brightness(var(--brightness, 1));
+}
+.studio-scene[data-scene="light"] .scene-world {
+  background: linear-gradient(#d2d7de, #f2efe7);
+}
+.studio-scene[data-scene="slate"] .scene-world {
+  background: radial-gradient(at 50% 35%, #596572, #1b222b);
+}
+.weapon-anchor {
+  width: 62%;
+  height: auto;
+  aspect-ratio: 1531 / 1027;
+  transform-origin: 50% 100%;
+  z-index: 1;
+  transition:
+    transform 0.12s,
+    left 0.12s,
+    bottom 0.12s;
+}
+.weapon-anchor img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: brightness(var(--brightness, 1));
+}
+#crosshair-canvas {
+  z-index: 4;
+}
+#radar-canvas {
+  z-index: 3;
+  top: 4%;
+  left: 4%;
+  opacity: 0.88;
+}
+.sample-hud {
+  z-index: 3;
+  inset: 0;
+  display: block;
+  font-family: Arial, sans-serif;
+  font-size: calc(var(--scene-unit, 5px) * 2 * var(--hud-scale, 1));
+  font-weight: 700;
+  text-shadow: 0 1px 3px #0008;
+  pointer-events: none;
+}
+.sample-hud[hidden],
+#radar-canvas[hidden] {
+  display: none;
+}
+.sample-hud > * {
+  position: absolute;
+}
+.sample-hud small {
+  font-size: 0.55em;
+  color: inherit;
+}
+.hud-score {
+  top: 3%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  font-size: 0.8em;
+}
+.hud-score b {
+  padding: 0.25em 0.5em;
+  background: #161c2380;
+  color: #fff;
+}
+.hud-location {
+  left: 7%;
+  top: 35%;
+  font-size: 0.6em;
+}
+.hud-cash {
+  left: 4%;
+  bottom: 5%;
+}
+.hud-health {
+  left: 32%;
+  bottom: 5%;
+}
+.hud-health i {
+  display: block;
+  height: 0.1em;
+  margin-left: 1.7em;
+  background: currentColor;
+}
+.hud-team {
+  left: 50%;
+  bottom: 4%;
+  transform: translateX(-50%);
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  padding: 0.45em;
+  font-size: 0.65em;
+}
+.hud-ammo {
+  right: 5%;
+  bottom: 5%;
+}
+.hud-inventory {
+  right: 4%;
+  bottom: 18%;
+  font-size: 0.55em;
+  text-align: right;
+  line-height: 2;
+}
+.preview-tuning {
+  flex-wrap: wrap;
+  font-size: 11px;
+  padding-top: 12px;
+}
+.preview-tuning input[type="range"] {
+  width: 85px;
+  min-width: 0;
+  accent-color: #ff7400;
+}
+.preview-tuning label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.preview-tuning output {
+  min-width: 24px;
+}
+#preview-expand {
+  margin-left: auto;
+  font-size: 11px;
+}
+.preview-panel.preview-expanded {
+  position: fixed;
+  inset: 2vh 3vw;
+  z-index: 1000;
+  overflow-y: auto;
+  display: block;
+  box-shadow: 0 0 0 100vmax #000c;
+}
+.preview-expanded .studio-scene {
+  width: min(100%, 133vh);
+  margin: auto;
+}
+.preview-expanded .preview-disclaimer {
+  max-width: 1000px;
+}
+.preview-expanded .preview-top {
+  padding: 12px 20px;
+}
+@media (max-width: 1000px) {
+  .preview-panel {
+    display: block;
+  }
+  .studio-scene {
+    height: auto;
+  }
+}
+@media (max-width: 720px) {
+  .studio-scene {
+    height: auto;
+  }
+  .preview-panel.preview-expanded {
+    inset: 1vh 2vw;
+  }
+  .preview-tuning {
+    gap: 6px;
+  }
+}

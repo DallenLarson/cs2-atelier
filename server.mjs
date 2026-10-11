@@ -327,6 +327,10 @@ const server = http.createServer(async (req, res) => {
       "/favicon.svg": "favicon.svg",
       "/studio": "studio.html",
       "/studio.js": "studio.js",
+      "/studio-preview.js": "studio-preview.js",
+      "/studio-dust2-radar.png": "studio-dust2-radar.png",
+      "/studio-pistol.png": "studio-pistol.png",
+      "/studio-dust2.jpg": "studio-dust2.jpg",
       "/studio-core.js": "studio-core.js",
       "/studio.css": "studio.css",
     };
@@ -335,19 +339,21 @@ const server = http.createServer(async (req, res) => {
       res.writeHead(200, {
         "Content-Type": f.endsWith(".json")
           ? "application/json"
-          : f.endsWith(".png")
-            ? "image/png"
-            : f.endsWith(".ico")
-              ? "image/x-icon"
-              : f.endsWith(".webmanifest")
-                ? "application/manifest+json"
-                : f.endsWith(".js")
-                  ? "text/javascript"
-                  : f.endsWith(".css")
-                    ? "text/css"
-                    : f.endsWith(".svg")
-                      ? "image/svg+xml"
-                      : "text/html",
+          : f.endsWith(".jpg")
+            ? "image/jpeg"
+            : f.endsWith(".png")
+              ? "image/png"
+              : f.endsWith(".ico")
+                ? "image/x-icon"
+                : f.endsWith(".webmanifest")
+                  ? "application/manifest+json"
+                  : f.endsWith(".js")
+                    ? "text/javascript"
+                    : f.endsWith(".css")
+                      ? "text/css"
+                      : f.endsWith(".svg")
+                        ? "image/svg+xml"
+                        : "text/html",
         "Cache-Control": "no-cache",
         "Content-Security-Policy":
           "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' https://*.googleusercontent.com; script-src 'self' https://www.gstatic.com https://apis.google.com; connect-src 'self' https://api-public.cs-prod.leetify.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firestore.googleapis.com https://www.googleapis.com; frame-src https://*.firebaseapp.com; frame-ancestors 'none'; base-uri 'none'; form-action 'self'",
