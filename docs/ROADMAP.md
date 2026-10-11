@@ -4,7 +4,7 @@ The Performance page supports Steam64 IDs, numeric Steam profile URLs, and Leeti
 
 Displayed data: Leetify Rating (`ranks.leetify`), Premier, FACEIT level/Elo, Aim, Positioning, Utility, and up to ten recent matches. Missing fields appear as dashes. Recent-match raw rating fields are intentionally omitted because the API documentation uses inconsistent example scales. No metric is invented or rescaled. Private/unknown privacy modes fail closed.
 
-Requests use no-store and credentials omit. No profile identifier or response is saved to localStorage, Firestore, GitHub feeds, or server storage. An explicit Google/local-guest choice precedes the first lookup in a tab session. This is a public lookup, not proof of Steam account ownership. No automatic Steam account linking is implemented.
+Requests use no-store and credentials omit. No profile identifier or response is saved to localStorage, Firestore, GitHub feeds, or server storage. An explicit Google/local-guest choice precedes the first lookup in a tab session. This is a public lookup, not proof of Steam account ownership. The public lookup itself does not verify ownership. The separate Google + Steam linking and friends-only comparison implementation is prepared but awaits backend activation; see [Steam friends setup](STEAM-FRIENDS.md).
 
 Official references:
 
@@ -12,7 +12,7 @@ Official references:
 - https://leetify.com/blog/leetify-api-developer-guidelines/amp/
 - Attribution image: unmodified “Leetify Badge White Large.png” from the official linked asset folder, Google Drive file `1SkDIGTav6Hqh15ZUMGEDCrmkOE-5mtKN`.
 
-Future work: vanity-name resolution and optional verified Steam linking. Any future API-key integration must keep secrets server-side; review hosting costs, privacy and current API requirements before adding it.
+Steam friends activation requires a server-side Steam key and approved backend hosting. Public lookup remains keyless. Vanity-name resolution is still future work.
 
 # Search readiness
 

@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.mjs",
     "test": "node --test tests/*.test.mjs",
-    "test:rules": "firebase emulators:exec --only firestore --project demo-atelier \"node --test tests/firestore.rules.test.mjs\"",
+    "test:rules": "firebase emulators:exec --only firestore --project demo-atelier \"node --test tests/firestore.rules.test.mjs tests/steam-emulator.test.mjs\"",
     "build": "node scripts/build-hosted.mjs",
     "feed": "node scripts/market-feed.mjs"
   },

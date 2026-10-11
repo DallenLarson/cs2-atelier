@@ -95,6 +95,114 @@
           </p>
         </div>
       </section>
+
+      <section class="friends-panel" aria-labelledby="friends-title">
+        <div class="friends-heading">
+          <div>
+            <span class="eyebrow">YOUR CIRCLE · FRIENDS ONLY</span>
+            <h2 id="friends-title">A little friendly competition.</h2>
+            <p>
+              Compare current Leetify ratings with your Steam friends. Find your
+              place in the squad.
+            </p>
+          </div>
+          <span class="friends-only-badge">Private comparison</span>
+        </div>
+        <div class="steam-connection">
+          <div>
+            <strong>Your Steam profile</strong>
+            <p id="steam-link-copy">Checking your account…</p>
+            <p id="steam-service-note" hidden>
+              Steam linking is awaiting activation. Public player lookup is
+              available below.
+            </p>
+          </div>
+          <div class="steam-actions">
+            <button class="primary" id="steam-google">
+              Sign in with Google</button
+            ><button class="steam-button" id="steam-connect" hidden disabled>
+              <img
+                src="/steam-signin.png"
+                alt="Sign in through Steam"
+                width="180"
+                height="35"
+              /></button
+            ><button class="button" id="my-performance" hidden>
+              My performance</button
+            ><button class="text-button" id="steam-unlink" hidden>
+              Disconnect Steam
+            </button>
+          </div>
+        </div>
+        <div class="friends-controls">
+          <label for="friends-metric">Rank by</label
+          ><select id="friends-metric">
+            <option value="leetify">Leetify Rating</option>
+            <option value="aim">Aim</option>
+            <option value="positioning">Positioning</option>
+            <option value="utility">Utility</option></select
+          ><button class="button" id="friends-refresh" disabled>
+            Compare my Steam friends
+          </button>
+        </div>
+        <p id="friends-status" role="status" aria-live="polite">
+          Connect Steam to build your friends leaderboard.
+        </p>
+        <div id="friends-empty" class="friends-empty">
+          <span aria-hidden="true">♧</span>
+          <div>
+            <strong>Your friends. Your leaderboard.</strong>
+            <p>
+              Verified Steam friends only. No public directory or global
+              ranking.
+            </p>
+          </div>
+        </div>
+        <div class="friends-summary">
+          <strong id="friends-position">Your position will appear here.</strong
+          ><span id="friends-progress"
+            >Only your verified Steam friends are included.</span
+          >
+        </div>
+        <div class="friends-table-wrap" id="friends-table-wrap" hidden>
+          <table class="friends-table">
+            <thead>
+              <tr>
+                <th scope="col">Rank</th>
+                <th scope="col">Player</th>
+                <th id="friends-score-heading" scope="col">Leetify Rating</th>
+                <th scope="col">Source</th>
+              </tr>
+            </thead>
+            <tbody id="friends-rows"></tbody>
+          </table>
+        </div>
+        <button class="button" id="friends-more" hidden>
+          Check next 20 friends
+        </button>
+        <p class="friends-privacy">
+          Steam must allow access to your friends list. Private or unavailable
+          Leetify profiles are excluded. Your verified Steam ID is saved to your
+          Google account; friends lists and ratings are not saved. Friends do
+          not need CSKit accounts.
+        </p>
+      </section>
+      <dialog id="steam-unlink-dialog" class="account-dialog">
+        <h2>Disconnect Steam?</h2>
+        <p>
+          This removes your verified Steam link and clears the current friends
+          comparison. You can reconnect through Steam later.
+        </p>
+        <p id="steam-unlink-error" role="alert"></p>
+        <button class="button" id="steam-unlink-cancel">Keep connected</button
+        ><button class="primary" id="steam-unlink-confirm">
+          Disconnect Steam
+        </button>
+      </dialog>
+      <div class="performance-section">
+        <h2>Look up any player</h2>
+        <span>Public profiles</span>
+      </div>
       <section class="lookup-panel">
         <form id="player-form">
           <label for="player-input">Steam ID or profile link</label>
@@ -189,5 +297,6 @@
       </footer>
     </main>
     <script type="module" src="/performance.js"></script>
+    <script type="module" src="/friends.js"></script>
   </body>
 </html>

@@ -56,5 +56,12 @@
         ]
       }
     ]
-  }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "steam",
+      "ignore": ["node_modules", ".git", "*.log", ".env*"]
+    }
+  ]
 }

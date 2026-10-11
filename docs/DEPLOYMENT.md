@@ -33,12 +33,16 @@ No paid backend or billing upgrade is needed for this setup within the providers
 
 Keep Namecheap BasicDNS. The connection uses these records:
 
-| Type | Host | Value |
-| --- | --- | --- |
-| A | `@` | `199.36.158.100` |
-| TXT | `@` | `hosting-site=atelier-cs2-hub` |
-| CNAME | `www` | `atelier-cs2-hub.web.app` |
+| Type  | Host  | Value                          |
+| ----- | ----- | ------------------------------ |
+| A     | `@`   | `199.36.158.100`               |
+| TXT   | `@`   | `hosting-site=atelier-cs2-hub` |
+| CNAME | `www` | `atelier-cs2-hub.web.app`      |
 
 Certificate challenge TXT values are supplied by Firebase and can change. Inspect Firebase Hosting custom-domain status for current values. Do not remove unrelated mail or verification records. Firebase provisions and renews HTTPS after DNS ownership and routing are verified.
 
 Both `cskit.site` and `www.cskit.site` are authorized in Firebase Authentication. Google sign-in currently uses the existing `atelier-cs2-hub.firebaseapp.com` OAuth handler to preserve the configured OAuth client.
+
+## Optional Steam service
+
+The Steam friends backend is separate from static Hosting and remains disabled pending billing approval and a server-side Steam Web API key. It is not included in automatic Hosting deployment. See [Steam friends activation](STEAM-FRIENDS.md). Existing free static hosting does not imply that the optional backend is cost-free.

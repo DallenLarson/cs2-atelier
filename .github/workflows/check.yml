@@ -30,4 +30,5 @@ jobs:
           distribution: temurin
           java-version: "21"
       - run: npm ci --ignore-scripts
+      - run: npm ci --prefix functions --ignore-scripts
       - run: npm run test:rules

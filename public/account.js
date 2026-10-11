@@ -372,3 +372,14 @@ ready.then(() => {
       sessionStorage.setItem("cskit.guest", "chosen"),
     );
 });
+
+export async function googleToken() {
+  await ready;
+  session();
+  if (
+    !account.user ||
+    !account.user.providerData.some((p) => p.providerId === "google.com")
+  )
+    throw Error("Sign in with Google first.");
+  return account.user.getIdToken();
+}

@@ -46,6 +46,19 @@ test(
       await assertFails(
         setDoc(doc(alice, "users/alice/private/unknown"), data),
       );
+      // Verified Steam identity and claim state must never be client writable/readable.
+      for (const path of [
+        "users/alice/private/steam",
+        "steamOwners/76561197969209908",
+        "steamLinkSessions/state",
+        "steamNonces/nonce",
+        "steamRateLimits/alice_friends",
+      ]) {
+        await assertFails(
+          setDoc(doc(alice, path), { steamId: "76561197969209908" }),
+        );
+        await assertFails(getDoc(doc(alice, path)));
+      }
       const s = doc(alice, "users/alice/private/studio");
       await assertFails(
         setDoc(s, { revision: 0, profiles: [], activeId: null }),
