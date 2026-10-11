@@ -88,7 +88,7 @@ export function applySeo(html, file) {
     )
     .replace(/<link\b[^>]*rel="canonical"[^>]*>/gi, "")
     .replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/gi, "");
-  const image = "https://cskit.site/social-cskit-v2.png";
+  const image = "https://cskit.site/social-cskit-v3.png";
   const graph = [
     {
       "@type": "Organization",

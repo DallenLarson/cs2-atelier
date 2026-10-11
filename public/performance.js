@@ -64,7 +64,7 @@ function show(data) {
             ? "Positioning"
             : "Utility");
       practice.style.cssText =
-        "display:block;margin-top:16px;font-size:12px;color:#c1ee8c";
+        "display:block;margin-top:16px;font-size:12px;color:#fc5c01";
       box.append(practice);
       return box;
     }),

@@ -331,6 +331,7 @@ const server = http.createServer(async (req, res) => {
       "/about": "about.html",
       "/privacy": "privacy.html",
       "/social-cskit-v2.png": "social-cskit-v2.png",
+  "/social-cskit-v3.png": "social-cskit-v3.png",
       "/workspace.css": "workspace.css",
       "/workspace-core.js": "workspace-core.js",
       "/workspace-store.js": "workspace-store.js",

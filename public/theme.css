@@ -2,7 +2,7 @@
   color-scheme: dark;
   color: #f3f4f6;
   background: #0c0e11;
-  --accent: #ff780f;
+  --accent: #fc5c01;
   --panel: #15181d;
   --line: #2b3038;
 }
@@ -160,7 +160,7 @@ textarea,
 }
 .primary,
 .studio-page .primary {
-  background: #ff780f;
+  background: #fc5c01;
   color: #171009;
   border: 1px solid #ff923d;
   box-shadow: 0 4px 16px #e66a001c;
@@ -186,7 +186,7 @@ textarea,
 }
 .step-nav button[aria-current] span,
 .progress-track > span {
-  background: #ff780f;
+  background: #fc5c01;
   color: #15100c;
 }
 .progress-track,
@@ -460,7 +460,7 @@ tbody tr:hover {
   margin: 8px 0;
 }
 .progress-track #progress-fill {
-  background: #ff780f;
+  background: #fc5c01;
 }
 /* Keep planned tools discoverable across every workspace. */
 .nav.nav-wip:disabled {

@@ -1,5 +1,5 @@
 :root {
-  --accent: #aafd06;
+  --accent: #fc5c01;
   --panel: #151b1e;
   --line: #2a3437;
   color: #f4f7f5;
@@ -28,27 +28,27 @@ aside .nav {
 }
 .nav.active {
   box-shadow: inset 3px 0 var(--accent);
-  background: #202a25;
-  color: #d8ff91;
+  background: #2c211c;
+  color: #fc5c01;
 }
 aside .sidebar-bottom {
   margin-top: auto;
   padding-top: 24px;
 }
 .eyebrow {
-  color: #b6d782;
+  color: #fc5c01;
 }
 a {
   color: inherit;
 }
 .primary {
-  background: #aafd06 !important;
-  color: #142000 !important;
-  border-color: #aafd06 !important;
+  background: #fc5c01 !important;
+  color: #211108 !important;
+  border-color: #fc5c01 !important;
   box-shadow: none !important;
 }
 .text-button {
-  color: #bddb94;
+  color: #fc5c01;
 }
 button:focus-visible,
 a:focus-visible,
@@ -57,7 +57,7 @@ select:focus-visible,
 textarea:focus-visible,
 summary:focus-visible,
 [tabindex]:focus-visible {
-  outline: 2px solid #c3ff53;
+  outline: 2px solid #fc5c01;
   outline-offset: 4px;
 }
 header {
@@ -89,7 +89,7 @@ header {
   top: -80px;
   left: 20px;
   z-index: 2000;
-  background: #aafd06;
+  background: #fc5c01;
   color: #111;
   padding: 12px;
 }
@@ -149,8 +149,8 @@ header {
 }
 .palette-results a:hover,
 .palette-results a:focus {
-  background: #27322c;
-  color: #b9ff5d;
+  background: #33251e;
+  color: #fc5c01;
 }
 .workspace-page main {
   max-width: 1800px;
@@ -221,11 +221,11 @@ header {
   display: grid;
   grid-template-columns: 1.25fr 1fr;
   overflow: hidden;
-  border: 1px solid #35432d;
+  border: 1px solid #493024;
   border-radius: 20px;
   padding: 40px;
   background:
-    radial-gradient(ellipse at 85% 40%, #53682a44, transparent 65%), #151b1e;
+    radial-gradient(ellipse at 85% 40%, #fc5c0126, transparent 65%), #151b1e;
   min-height: 325px;
 }
 .workspace-hero h2 {
@@ -268,7 +268,7 @@ header {
 .workspace-hero-art span {
   font-size: 9px;
   letter-spacing: 2px;
-  color: #9aab88;
+  color: #bda18f;
   margin-top: -8px;
 }
 .workspace-metrics {
@@ -293,7 +293,7 @@ header {
   display: block;
   font-size: 36px;
   margin: 10px 0;
-  color: #eaf6e6;
+  color: #f6eee8;
   font-weight: 600;
 }
 .workspace-metrics small {
@@ -349,7 +349,7 @@ header {
 }
 .workspace-card > a {
   display: inline-block;
-  color: #c1ee8c;
+  color: #fc5c01;
   margin-top: 10px;
   font-size: 13px;
   text-decoration: none;
@@ -360,22 +360,22 @@ header {
   justify-content: space-between;
   text-transform: uppercase;
   letter-spacing: 1.3px;
-  color: #a8b99c;
+  color: #bca99c;
   font-size: 10px;
 }
 .card-kicker button {
   background: none;
   border: 0;
-  color: #afbea9;
+  color: #bdafa5;
   font-size: 18px;
   min-width: 32px;
   min-height: 32px;
 }
 .tag {
   display: inline-block;
-  border: 1px solid #3a493c;
-  background: #263126;
-  color: #bbd7aa;
+  border: 1px solid #4a3529;
+  background: #31231c;
+  color: #ffc09b;
   padding: 5px 8px;
   border-radius: 5px;
   font-size: 10px;
@@ -528,7 +528,7 @@ header {
   display: block;
   font-size: 29px;
   margin: 12px 0;
-  color: #d8f7bd;
+  color: #ffc09b;
 }
 .comparison small,
 .comparison span {
@@ -540,9 +540,9 @@ header {
 }
 .notice {
   padding: 12px 16px;
-  border-left: 2px solid #92b867;
-  background: #20291e;
-  color: #c3d2b8 !important;
+  border-left: 2px solid #fc5c01;
+  background: #2c211b;
+  color: #dcc3b4 !important;
   font-size: 12px !important;
 }
 .workspace-page pre {
@@ -551,7 +551,7 @@ header {
   padding: 16px;
   background: #0c1214;
   font-size: 11px;
-  color: #b4cba9;
+  color: #d2b5a2;
   border: 1px solid var(--line);
   border-radius: 8px;
 }
@@ -596,12 +596,12 @@ header {
   text-decoration: none;
 }
 .tool-card:hover {
-  border-color: #8aab4e;
+  border-color: #fc5c01;
 }
 .workspace-skeleton {
   padding: 70px 20px;
   text-align: center;
-  color: #b7c8b2;
+  color: #c8bbb2;
   border: 1px solid var(--line);
   border-radius: 16px;
   background: #151b1e;
@@ -673,8 +673,8 @@ header {
     z-index: 1001;
   }
   .nav-open .shell-menu {
-    background: #aafd06;
-    color: #152000;
+    background: #fc5c01;
+    color: #211108;
   }
   .studio-page aside nav,
   aside nav {
