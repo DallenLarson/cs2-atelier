@@ -16,6 +16,7 @@ jobs:
       - run: node --check public/studio.js
       - run: node --check public/studio-core.js
       - run: node --check public/account.js && node --check public/account-core.js && node --check public/hub.js
+      - run: node --check public/workspace.js && node --check public/workspace-store.js && node --check public/shell.js
       - run: node --test tests/*.test.mjs
   firebase-rules:
     runs-on: ubuntu-latest

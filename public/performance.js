@@ -55,6 +55,17 @@ function show(data) {
       track.setAttribute("aria-hidden", "true");
       track.append(fill);
       box.append(track);
+      const practice = element("a", "Choose a practice drill →");
+      practice.href =
+        "/improve?focus=" +
+        (key === "aim"
+          ? "Aim"
+          : key === "positioning"
+            ? "Positioning"
+            : "Utility");
+      practice.style.cssText =
+        "display:block;margin-top:16px;font-size:12px;color:#c1ee8c";
+      box.append(practice);
       return box;
     }),
   );

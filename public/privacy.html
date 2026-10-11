@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Tools — CSKit CS2 Toolkit</title>
+    <meta
+      name="description"
+      content="Simple calculations and tools. No account required."
+    />
+    <link rel="canonical" href="https://cskit.site/tools" />
+    <meta name="theme-color" content="#0B0F11" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/theme.css" />
+    <link rel="stylesheet" href="/workspace.css" />
+  </head>
+  <body class="workspace-page" data-page="tools">
+    <a class="skip-link" href="#workspace-content">Skip to content</a>
+    <aside>
+      <a class="brand" href="/dashboard" aria-label="CSKit home"
+        ><img src="/cskit-wordmark.png" width="174" height="58" alt="CSKit"
+      /></a>
+      <div class="nav-label">YOUR WORKSPACE</div>
+      <nav>
+        <a class="nav" href="/studio">Studio</a
+        ><a class="nav" href="/market">Market</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <span class="tag">CSKIT 2.0</span>
+        <p>Free for every player.<br />No premium tier.</p>
+        <a href="/account">Account &amp; data →</a>
+      </div>
+    </aside>
+    <main>
+      <header>
+        <div class="breadcrumb">
+          Your workspace <span>/</span> <b>Privacy</b>
+        </div>
+        <button
+          class="account-control"
+          id="account-control"
+          aria-label="Open account"
+        >
+          <span class="profile-photo" aria-hidden="true">○</span
+          ><span class="account-control-label">Sign in</span>
+        </button>
+      </header>
+      <section class="heading">
+        <div>
+          <div class="eyebrow">CSKIT</div>
+          <h1>Your data in CSKit</h1>
+        </div>
+      </section>
+      <section id="workspace-content" class="workspace-card">
+        <p>Last updated October 10, 2026.</p>
+        <h2>Guest use.</h2>
+        <p>
+          Your guest wishlist, Studio profiles, practice history, experiments,
+          map favorites and layout are stored in your browser. Clearing browser
+          storage removes them. Export backups before switching browsers or
+          clearing data.
+        </p>
+        <h2>Optional Google account.</h2>
+        <p>
+          Google sign-in uses Firebase Authentication. Signed-in Studio builds,
+          wishlist and workspace records are stored privately in Firestore under
+          your account. Guest originals stay separate; importing is explicit.
+          Your display name, email and profile photo are used for the account
+          interface.
+        </p>
+        <h2>Third-party requests.</h2>
+        <p>
+          Player lookup sends the player identifier you enter to Leetify.
+          Results are shown for the current page and are not persisted by CSKit.
+          Market data is fetched from the public CSKit feed, sourced from
+          Skinport. Google/Firebase, hosting and linked providers may process
+          normal connection information according to their own policies.
+        </p>
+        <h2>Local account copies.</h2>
+        <p>
+          A signed-in workspace copy and failed-save drafts can remain in this
+          browser to help recover work. On shared devices, export what you need
+          and clear CSKit site storage after signing out. Signing out alone does
+          not erase browser storage.
+        </p>
+        <h2>Control your records.</h2>
+        <p>
+          Use Workspace data to export practice and experiments, import copies,
+          or clear that workspace. Studio has profile export and deletion.
+          Wishlist entries can be removed in Market. The account page exports
+          Studio and wishlist data. Self-service deletion of the Google-linked
+          CSKit account is not yet available; account deletion support remains
+          on the roadmap.
+        </p>
+        <h2>Public sharing and analytics.</h2>
+        <p>
+          Public profiles and squads are not enabled. This release adds no
+          analytics trackers, advertising cookies or automatic notifications.
+          Opening external links is your choice.
+        </p>
+      </section>
+      <footer>
+        <span>CSKit · An independent Counter-Strike toolkit.</span
+        ><span>Free tools. Your data. Your choice.</span>
+        <span class="footer-links"
+          ><a href="/about">About</a> · <a href="/privacy">Privacy</a> ·
+          <a
+            href="https://github.com/DallenLarson/cs2-atelier/issues"
+            target="_blank"
+            rel="noreferrer"
+            >Feedback</a
+          ></span
+        >
+      </footer>
+    </main>
+    <script type="module" src="/shell.js"></script>
+    <script type="module" src="/account.js"></script>
+  </body>
+</html>

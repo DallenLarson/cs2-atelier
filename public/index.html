@@ -33,6 +33,7 @@
       property="og:image:alt"
       content="CSKit Counter-Strike market, wishlist and Loadout Studio"
     />
+    <link rel="stylesheet" href="/workspace.css" />
   </head>
   <body class="market-page">
     <aside>
@@ -187,7 +188,7 @@
           >
           · USD · Lowest tradable listings</span
         ><span id="updated">Waiting for first update</span>
-      </footer>
+      <span class="footer-links"><a href="/about">About</a> · <a href="/privacy">Privacy</a> · <a href="https://github.com/DallenLarson/cs2-atelier/issues" target="_blank" rel="noreferrer">Feedback</a></span></footer>
     </main>
     <dialog id="detail">
       <button id="close-detail" class="close" aria-label="Close item">×</button>
@@ -195,5 +196,6 @@
     </dialog>
     <div id="toast" role="status"></div>
     <script type="module" src="/app.js" defer></script>
+    <script type="module" src="/shell.js"></script>
   </body>
 </html>

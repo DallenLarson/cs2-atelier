@@ -3,220 +3,95 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>CSKit — Counter-Strike 2 Hub, Skins & Loadout Tools</title>
+    <title>Dashboard — CSKit CS2 Toolkit</title>
     <meta
       name="description"
-      content="Your all-in-one Counter-Strike hub. Track CS2 skin prices, save a wishlist, and build your crosshair, viewmodel and config with Loadout Studio."
+      content="Your setup, stats, practice and progress in one free workspace."
     />
-    <link rel="canonical" href="https://cskit.site/" />
-    <meta property="og:site_name" content="CSKit" />
-    <meta property="og:image" content="https://cskit.site/social-preview.jpg" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta property="og:title" content="CSKit — Your Counter-Strike toolkit" />
-    <meta
-      property="og:description"
-      content="Track the market. Build your loadout. Make it yours."
-    />
-    <meta property="og:url" content="https://cskit.site/" />
-    <meta name="theme-color" content="#0c0e11" />
+    <link rel="canonical" href="https://cskit.site/dashboard" />
+    <meta name="theme-color" content="#0B0F11" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link rel="icon" type="image/png" sizes="96x96" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/site.webmanifest" />
     <link rel="stylesheet" href="/style.css" />
-    <link rel="stylesheet" href="/hub.css" />
     <link rel="stylesheet" href="/theme.css" />
-    <meta property="og:type" content="website" />
-    <meta
-      property="og:image:alt"
-      content="CSKit Counter-Strike market, wishlist and Loadout Studio"
-    />
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "CSKit",
-        "alternateName": "CSKit.site",
-        "url": "https://cskit.site/",
-        "description": "Counter-Strike 2 market tracker, wishlist and Loadout Studio.",
-        "publisher": {
-          "@type": "Organization",
-          "name": "CSKit",
-          "url": "https://cskit.site/",
-          "logo": "https://cskit.site/cskit-icon-dark.png"
-        }
-      }
-    </script>
+    <link rel="stylesheet" href="/workspace.css" />
   </head>
-  <body class="hub-page">
+  <body class="workspace-page" data-page="dashboard">
+    <a class="skip-link" href="#workspace-content">Skip to content</a>
     <aside>
-      <a class="brand" href="/" aria-label="CSKit home"
+      <a class="brand" href="/dashboard" aria-label="CSKit home"
         ><img src="/cskit-wordmark.png" width="174" height="58" alt="CSKit"
       /></a>
-      <div class="nav-label">YOUR SPACE</div>
+      <div class="nav-label">YOUR WORKSPACE</div>
       <nav>
-        <a class="nav active" href="/" aria-current="page"
-          ><span>⌂</span> Overview</a
-        ><a class="nav" href="/market"><span>◈</span> Market</a
-        ><a class="nav" href="/market#wishlist"><span>♡</span> Wishlist</a
-        ><a class="nav" href="/studio"><span>⌘</span> Loadout Studio</a>
-        <a class="nav" href="/performance"><span>▥</span> Performance</a>
+        <a class="nav" href="/studio">Studio</a
+        ><a class="nav" href="/market">Market</a>
       </nav>
       <div class="sidebar-bottom">
-        <a class="account-link" href="/account"
-          ><span class="account-avatar" id="sidebar-avatar">C</span
-          ><span
-            ><strong data-account-label>Sign in</strong
-            ><small>Your personal workspace</small></span
-          ></a
-        >
-        <p>Less friction.<br />More Counter-Strike.</p>
+        <span class="tag">CSKIT 2.0</span>
+        <p>Free for every player.<br />No premium tier.</p>
+        <a href="/account">Account &amp; data →</a>
       </div>
     </aside>
     <main>
       <header>
         <div class="breadcrumb">
-          Your workspace <span>/</span> <b>Overview</b>
+          Your workspace <span>/</span> <b>Dashboard</b>
         </div>
-        <span class="hub-status" id="hub-status">Opening your hub…</span>
         <button
           class="account-control"
           id="account-control"
           aria-label="Open account"
         >
-          <span class="profile-photo" aria-hidden="true"
-            ><svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.7"
-              aria-hidden="true"
-            >
-              <circle cx="12" cy="8" r="3.5" />
-              <path d="M5 21v-2a7 7 0 0 1 14 0v2" /></svg></span
+          <span class="profile-photo" aria-hidden="true">○</span
           ><span class="account-control-label">Sign in</span>
         </button>
       </header>
       <section class="heading">
         <div>
-          <div class="eyebrow">THE COUNTER-STRIKE WORKSPACE</div>
-          <h1 id="greeting">Your Counter-Strike hub.</h1>
+          <div class="eyebrow">COUNTER-STRIKE 2 · DASHBOARD</div>
+          <h1>Your next round starts here.</h1>
+          <p>Your setup, stats, practice and progress in one free workspace.</p>
+        </div>
+      </section>
+      <div class="workspace-toolbar">
+        <span id="workspace-status" role="status">Opening your workspace…</span>
+        <details>
+          <summary>Workspace data</summary>
+          <button class="button" id="workspace-export">Export workspace</button
+          ><label class="button import-label"
+            >Import as copies<input
+              id="workspace-import"
+              type="file"
+              accept=".json,application/json" /></label
+          ><button class="text-button" id="workspace-reset">
+            Clear workspace
+          </button>
           <p>
-            One toolkit for your skins, your setup, and your next step in CS2.
+            Includes plans, sessions, experiments, favorites and layout.
+            <a href="/account">Export Studio and wishlist separately.</a>
+            Imports add copies; existing entries remain.
           </p>
-        </div>
-      </section>
-      <div id="hub-error" class="hub-notice" role="alert" hidden></div>
-      <section class="hub-hero">
-        <div class="hero-copy">
-          <span class="eyebrow">CSKIT · CS2 HUB</span>
-          <h2>Every round.<br />More your own.</h2>
-          <p>
-            Find something worth watching.<br />Build a setup that feels like
-            you.<br />Keep it all in one place.
-          </p>
-          <a class="primary" href="/studio"
-            >Open Loadout Studio <span>↗</span></a
-          >
-        </div>
-        <div class="hero-art" aria-hidden="true">
-          <div class="hero-orbit"></div>
-          <span class="hero-caption">MAKE IT YOURS.</span
-          ><img
-            src="/api/artwork?name=M4A1-S%20%7C%20Printstream%20(Field-Tested)&size=large"
-            alt=""
-          /><span class="art-label">M4A1-S <b>Printstream</b></span>
-        </div>
-      </section>
-      <section class="hub-account" aria-label="Account">
-        <div class="account-intro">
-          <span class="account-avatar" id="account-avatar">C</span>
-          <div>
-            <span class="eyebrow" id="account-kicker"
-              >ONE ACCOUNT. YOUR WHOLE WORKSPACE.</span
-            >
-            <h2 id="account-title">Pick up where you left off.</h2>
-            <p id="account-description">
-              Use your Google account to keep wishlists and loadouts together.
-              No new password to remember.
-            </p>
-          </div>
-        </div>
-        <div class="account-actions">
-          <button class="google-button" id="google-signin" disabled>
-            <span class="google-symbol">G</span> Continue with Google</button
-          ><a id="guest-link" href="/market">Explore as a guest ↗</a
-          ><button class="button" id="signout" hidden>Sign out</button
-          ><span class="account-note" id="account-note" role="status"
-            >Checking account availability…</span
-          >
-        </div>
-      </section>
-      <section class="migration-card" id="migration" hidden>
-        <div>
-          <h3>Already made yourself at home?</h3>
-          <p>
-            Bring this computer’s wishlist and loadouts to your account.
-            Existing cloud entries win on duplicates; your local originals stay
-            here.
-          </p>
-        </div>
-        <button class="button" id="import-local">
-          Bring local data to my account
-        </button>
-      </section>
-      <div class="hub-section-heading">
-        <h2>Your workspace</h2>
-        <span id="workspace-mode">Guest workspace · this computer</span>
+        </details>
       </div>
-      <section class="hub-tools">
-        <a class="hub-tool market-tool" href="/market"
-          ><span class="tool-symbol">◈</span><span class="tool-arrow">↗</span>
-          <h3>The market, in focus.</h3>
-          <p>Explore skins and follow current Skinport listings.</p>
-          <div class="tool-foot">
-            <strong id="market-count">—</strong><span>market items</span>
-          </div></a
-        ><a class="hub-tool wishlist-tool" href="/market#wishlist"
-          ><span class="tool-symbol">♡</span><span class="tool-arrow">↗</span>
-          <h3>A few favorites.</h3>
-          <p>Your next pickup, at a price worth waiting for.</p>
-          <div class="tool-foot">
-            <strong id="wishlist-count">—</strong><span>saved items</span>
-          </div></a
-        ><a class="hub-tool studio-tool" href="/studio"
-          ><span class="tool-symbol">⌘</span><span class="tool-arrow">↗</span>
-          <h3>Made for your game.</h3>
-          <p>Refine your crosshair, viewmodel, controls, and feel.</p>
-          <div class="tool-foot">
-            <strong id="build-count">—</strong><span>personal builds</span>
-          </div></a
-        >
-        <a class="hub-tool performance-tool" href="/performance"
-          ><span class="tool-symbol">▥</span><span class="tool-arrow">↗</span>
-          <h3>Your game, in numbers.</h3>
-          <p>
-            Check your Leetify Rating, aim, utility and recent match results.
-          </p>
-          <div class="tool-foot"><span>OPEN PERFORMANCE →</span></div></a
-        >
-      </section>
-      <section class="hub-bottom">
-        <div>
-          <span class="eyebrow">YOUR SPACE, YOUR CHOICE</span>
-          <h3>Easy to enter. Easy to take with you.</h3>
-          <p>
-            Browse as a guest, or sign in for account storage. Export your data
-            whenever you need it.
-          </p>
-        </div>
-        <button class="button" id="hub-export">Export my data</button>
-      </section>
+      <div
+        class="workspace-error"
+        id="workspace-error"
+        role="alert"
+        hidden
+      ></div>
+      <button class="button" id="export-draft" hidden>
+        Export unsaved edits
+      </button>
+      <div id="workspace-content">
+        <div class="workspace-skeleton">Loading your private workspace…</div>
+      </div>
       <footer>
         <span>CSKit · An independent Counter-Strike toolkit.</span
-        ><span>Market · Wishlist · Loadout Studio</span>
-      </footer>
+        ><span>Free tools. Your data. Your choice.</span>
+      <span class="footer-links"><a href="/about">About</a> · <a href="/privacy">Privacy</a> · <a href="https://github.com/DallenLarson/cs2-atelier/issues" target="_blank" rel="noreferrer">Feedback</a></span></footer>
     </main>
-    <script type="module" src="/hub.js"></script>
+    <script type="module" src="/shell.js"></script>
+    <script type="module" src="/workspace.js"></script>
   </body>
 </html>

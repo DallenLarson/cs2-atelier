@@ -1,1 +1,1 @@
-{"name": "CSKit \u2014 Counter-Strike Hub", "short_name": "CSKit", "start_url": "/", "display": "standalone", "background_color": "#0c0e11", "theme_color": "#0c0e11", "icons": [{"src": "/cskit-icon-dark.png", "sizes": "512x512", "type": "image/png"}]}
+{"name": "CSKit \u2014 Counter-Strike Hub", "short_name": "CSKit", "start_url": "/", "display": "standalone", "background_color": "#0b0f11", "theme_color": "#0b0f11", "icons": [{"src": "/cskit-icon-dark.png", "sizes": "512x512", "type": "image/png"}]}

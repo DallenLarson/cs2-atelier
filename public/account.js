@@ -1,4 +1,5 @@
 import { hosted, hostedRequest } from "./hosted.js";
+import { freshWorkspace, validateWorkspace } from "./workspace-core.js";
 import {
   validateLibrary,
   validateWishlist,
@@ -265,9 +266,31 @@ let accountPrompt;
 export async function ensureWorkspace() {
   await ready;
   session();
-  if (account.user || sessionStorage.getItem("cskit.guest") === "chosen")
-    return true;
-  return openAccount();
+  return true;
+}
+
+export async function workspaceCloud(body) {
+  await ready;
+  session();
+  const target = ref("workspace");
+  if (body === undefined) {
+    const doc = await store.getDocFromServer(target);
+    session();
+    return doc.exists() ? validateWorkspace(doc.data()) : freshWorkspace();
+  }
+  validateWorkspace(body);
+  return store.runTransaction(db, async (tx) => {
+    const old = await tx.get(target);
+    session();
+    const revision = old.exists() ? old.data().revision : 0;
+    if (revision !== body.revision)
+      throw Error(
+        "Your account has newer changes. Export your edits, reload, then import as copies.",
+      );
+    const next = { ...body, revision: revision + 1 };
+    tx.set(target, next);
+    return next;
+  });
 }
 export async function openAccount() {
   await ready;

@@ -60,6 +60,33 @@ test(
         await assertFails(getDoc(doc(alice, path)));
       }
       const s = doc(alice, "users/alice/private/studio");
+      const workspace = {
+        schema: 1,
+        revision: 1,
+        plans: [],
+        sessions: [],
+        experiments: [],
+        favorites: [],
+        widgets: [],
+      };
+      const workspacePath = "users/alice/private/workspace";
+      await assertSucceeds(setDoc(doc(alice, workspacePath), workspace));
+      await assertFails(getDoc(doc(bob, workspacePath)));
+      await assertFails(getDoc(doc(guest, workspacePath)));
+      await assertFails(
+        setDoc(doc(bob, workspacePath), { ...workspace, revision: 2 }),
+      );
+      await assertFails(setDoc(doc(alice, workspacePath), workspace));
+      await assertSucceeds(
+        setDoc(doc(alice, workspacePath), { ...workspace, revision: 2 }),
+      );
+      await assertFails(
+        setDoc(doc(alice, workspacePath), {
+          ...workspace,
+          revision: 3,
+          sessions: Array(501).fill({}),
+        }),
+      );
       await assertFails(
         setDoc(s, { revision: 0, profiles: [], activeId: null }),
       );

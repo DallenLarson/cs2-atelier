@@ -84,7 +84,7 @@ async function sync() {
           minute: "2-digit",
         })
       : "Waiting for first update";
-    $("#wish-count").textContent = state.wishlist.length;
+    if ($("#wish-count")) $("#wish-count").textContent = state.wishlist.length;
     $("#saved").innerHTML = state.wishlist.length + "<span>items</span>";
     const data = await api("/api/items?category=wishlist&limit=10000");
     allWishlist = data.items;

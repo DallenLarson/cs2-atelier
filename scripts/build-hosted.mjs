@@ -6,6 +6,7 @@ import {
   copyFile,
 } from "node:fs/promises";
 import { createHash } from "node:crypto";
+import { applySeo } from "./seo.mjs";
 await mkdir("dist", { recursive: true });
 const art = JSON.parse(await readFile("feed/studio-artwork.json", "utf8"));
 const files = (await readdir("public")).sort();
@@ -18,6 +19,7 @@ for (const file of files) {
       '<html lang="en">',
       '<html lang="en" data-hosted="true">',
     );
+    html = applySeo(html, file);
     html = html.replace(
       /src="\/api\/artwork\?name=([^"&]+)&size=large"/g,
       (_, name) => `src="${art[decodeURIComponent(name)] || ""}"`,
@@ -29,7 +31,7 @@ for (const file of files) {
     // Version internal navigation too: old HTML may still be fresh in a visitor's
     // browser from a previous release. Canonical URLs remain query-free.
     html = html.replace(
-      /href="(\/(?:market|studio|account|performance)?)(#[^"]*)?"/g,
+      /href="(\/(?:market|studio|account|performance|dashboard|improve|experiments|maps|tools|community|updates)?)(#[^"]*)?"/g,
       (_, route, fragment = "") => `href="${route}?v=${version}${fragment}"`,
     );
     html = html
@@ -74,7 +76,21 @@ await writeFile(
 await writeFile(
   "dist/sitemap.xml",
   '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
-    ["/", "/market", "/studio", "/performance"]
+    [
+      "/",
+
+      "/market",
+      "/studio",
+      "/performance",
+      "/improve",
+      "/experiments",
+      "/maps",
+      "/tools",
+
+      "/updates",
+      "/about",
+      "/privacy",
+    ]
       .map((p) => `<url><loc>https://cskit.site${p}</loc></url>`)
       .join("") +
     "</urlset>",

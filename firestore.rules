@@ -2,6 +2,21 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     function owner(uid) { return request.auth != null && request.auth.uid == uid; }
+    match /users/{uid}/private/workspace {
+      function validWorkspace() {
+        let d = request.resource.data;
+        return d.keys().hasOnly(['schema','revision','plans','sessions','experiments','favorites','widgets'])
+          && d.schema == 1 && d.revision is int
+          && d.plans is list && d.plans.size() <= 50
+          && d.sessions is list && d.sessions.size() <= 500
+          && d.experiments is list && d.experiments.size() <= 30
+          && d.favorites is list && d.favorites.size() <= 20
+          && d.widgets is list && d.widgets.size() <= 5;
+      }
+      allow read, delete: if owner(uid);
+      allow create: if owner(uid) && validWorkspace() && request.resource.data.revision == 1;
+      allow update: if owner(uid) && validWorkspace() && request.resource.data.revision == resource.data.revision + 1;
+    }
     match /users/{uid}/private/wishlist {
       allow read, delete: if owner(uid);
       allow create, update: if owner(uid)

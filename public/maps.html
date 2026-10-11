@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Maps — CSKit CS2 Toolkit</title>
+    <meta
+      name="description"
+      content="Map references, favorites and a direct path into practice."
+    />
+    <link rel="canonical" href="https://cskit.site/maps" />
+    <meta name="theme-color" content="#0B0F11" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/theme.css" />
+    <link rel="stylesheet" href="/workspace.css" />
+  </head>
+  <body class="workspace-page" data-page="maps">
+    <a class="skip-link" href="#workspace-content">Skip to content</a>
+    <aside>
+      <a class="brand" href="/dashboard" aria-label="CSKit home"
+        ><img src="/cskit-wordmark.png" width="174" height="58" alt="CSKit"
+      /></a>
+      <div class="nav-label">YOUR WORKSPACE</div>
+      <nav>
+        <a class="nav" href="/studio">Studio</a
+        ><a class="nav" href="/market">Market</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <span class="tag">CSKIT 2.0</span>
+        <p>Free for every player.<br />No premium tier.</p>
+        <a href="/account">Account &amp; data →</a>
+      </div>
+    </aside>
+    <main>
+      <header>
+        <div class="breadcrumb">Your workspace <span>/</span> <b>Maps</b></div>
+        <button
+          class="account-control"
+          id="account-control"
+          aria-label="Open account"
+        >
+          <span class="profile-photo" aria-hidden="true">○</span
+          ><span class="account-control-label">Sign in</span>
+        </button>
+      </header>
+      <section class="heading">
+        <div>
+          <div class="eyebrow">COUNTER-STRIKE 2 · MAPS</div>
+          <h1>Learn the space.</h1>
+          <p>Map references, favorites and a direct path into practice.</p>
+        </div>
+      </section>
+      <div class="workspace-toolbar">
+        <span id="workspace-status" role="status">Opening your workspace…</span>
+        <details>
+          <summary>Workspace data</summary>
+          <button class="button" id="workspace-export">Export workspace</button
+          ><label class="button import-label"
+            >Import as copies<input
+              id="workspace-import"
+              type="file"
+              accept=".json,application/json" /></label
+          ><button class="text-button" id="workspace-reset">
+            Clear workspace
+          </button>
+          <p>
+            Includes plans, sessions, experiments, favorites and layout.
+            <a href="/account">Export Studio and wishlist separately.</a>
+            Imports add copies; existing entries remain.
+          </p>
+        </details>
+      </div>
+      <div
+        class="workspace-error"
+        id="workspace-error"
+        role="alert"
+        hidden
+      ></div>
+      <button class="button" id="export-draft" hidden>
+        Export unsaved edits
+      </button>
+      <div id="workspace-content">
+        <div class="workspace-skeleton">Loading your private workspace…</div>
+      </div>
+      <footer>
+        <span>CSKit · An independent Counter-Strike toolkit.</span
+        ><span>Free tools. Your data. Your choice.</span>
+      <span class="footer-links"><a href="/about">About</a> · <a href="/privacy">Privacy</a> · <a href="https://github.com/DallenLarson/cs2-atelier/issues" target="_blank" rel="noreferrer">Feedback</a></span></footer>
+    </main>
+    <script type="module" src="/shell.js"></script>
+    <script type="module" src="/workspace.js"></script>
+  </body>
+</html>

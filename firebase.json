@@ -21,7 +21,7 @@
     "rewrites": [
       {
         "source": "/account",
-        "destination": "/index.html"
+        "destination": "/account.html"
       }
     ],
     "headers": [
