@@ -22,6 +22,7 @@ function text(tag, value, cls) {
   return el;
 }
 async function api(path, body) {
+  const generation = epoch;
   const token = await googleToken();
   const response = await fetch("/api/steam/" + path, {
     method: body === undefined ? "GET" : "POST",
@@ -39,6 +40,8 @@ async function api(path, body) {
   } catch {
     throw Error("Steam service is not available yet.");
   }
+  if (generation !== epoch)
+    throw Error("Your Google account changed. Reload before continuing.");
   if (!response.ok) throw Error(value.error || "Steam request failed.");
   return value;
 }

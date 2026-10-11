@@ -381,5 +381,7 @@ export async function googleToken() {
     !account.user.providerData.some((p) => p.providerId === "google.com")
   )
     throw Error("Sign in with Google first.");
-  return account.user.getIdToken();
+  const token = await account.user.getIdToken();
+  session();
+  return token;
 }
