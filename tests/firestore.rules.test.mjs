@@ -21,6 +21,17 @@ test(
       const alice = env.authenticatedContext("alice").firestore(),
         bob = env.authenticatedContext("bob").firestore(),
         guest = env.unauthenticatedContext().firestore();
+      const boardPath = "users/alice/private/scoreboard";
+      const board = {revision:1,payload:JSON.stringify({name:"Squad",mine:"76561197969209908",friends:[],metric:"leetify"})};
+      await assertSucceeds(setDoc(doc(alice,boardPath),board));
+      await assertSucceeds(getDoc(doc(alice,boardPath)));
+      await assertFails(getDoc(doc(bob,boardPath)));
+      await assertFails(getDoc(doc(guest,boardPath)));
+      await assertFails(setDoc(doc(bob,boardPath),board));
+      await assertFails(setDoc(doc(alice,boardPath),board));
+      await assertFails(setDoc(doc(alice,boardPath),{...board,revision:2,verified:true}));
+      await assertFails(setDoc(doc(alice,boardPath),{revision:2,payload:"x".repeat(12001)}));
+      await assertSucceeds(setDoc(doc(alice,boardPath),{...board,revision:2}));
       const data = { wishlist: [] };
       await assertSucceeds(
         setDoc(doc(alice, "users/alice/private/wishlist"), data),

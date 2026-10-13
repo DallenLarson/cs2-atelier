@@ -299,6 +299,8 @@ const server = http.createServer(async (req, res) => {
     const files = {
       "/steam-service.json": "steam-service.json",
       "/friends.js": "friends.js",
+      "/scoreboard.js": "scoreboard.js",
+      "/scoreboard-core.js": "scoreboard-core.js",
       "/friends-core.js": "friends-core.js",
       "/steam-signin.png": "steam-signin.png",
       "/performance": "performance.html",

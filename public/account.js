@@ -408,3 +408,18 @@ export async function googleToken() {
   session();
   return token;
 }
+
+export async function scoreboardCloud(body) {
+  await ready; session();
+  const target = ref("scoreboard");
+  if (body === undefined) {
+    const snapshot = await store.getDocFromServer(target); session();
+    return snapshot.exists() ? snapshot.data() : {revision: 0, payload: JSON.stringify({name:"My squad", mine:"", friends:[], metric:"leetify"})};
+  }
+  return store.runTransaction(db, async tx => {
+    const old = await tx.get(target); session();
+    if ((old.exists() ? old.data().revision : 0) !== body.revision) throw Error("Your scoreboard changed in another tab. Reload before editing.");
+    const next = {revision: body.revision + 1, payload: body.payload};
+    tx.set(target, next); return next;
+  });
+}

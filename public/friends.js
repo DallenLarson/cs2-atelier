@@ -84,6 +84,7 @@ function draw() {
   $("#friends-table-wrap").hidden = !ranked.length;
 }
 function renderLink() {
+  document.dispatchEvent(new CustomEvent("cskit-steam-status", {detail:{linked, enabled}}));
   $("#steam-google").hidden = !!account.user;
   $("#steam-connect").hidden = !account.user || !!linked;
   $("#steam-connect").disabled = !enabled;

@@ -47,7 +47,7 @@
         ><a class="nav" href="/market#wishlist"><span>♡</span> Wishlist</a
         ><a class="nav" href="/studio"><span>⌘</span> Loadout Studio</a>
         <a class="nav active" href="/performance" aria-current="page"
-          ><span>▥</span> Performance</a
+          ><span>▥</span> Your Performance</a
         >
       </nav>
       <div class="sidebar-bottom">
@@ -64,7 +64,7 @@
     <main>
       <header>
         <div class="breadcrumb">
-          Your workspace <span>/</span> <b>Performance</b>
+          Your workspace <span>/</span> <b>Your Performance</b>
         </div>
         <span class="hub-status" id="hub-status">Data provided by Leetify</span>
         <button
@@ -89,7 +89,7 @@
       <section class="heading">
         <div>
           <div class="eyebrow">COUNTER-STRIKE 2 · PERFORMANCE</div>
-          <h1>Know your game.</h1>
+          <h1>Your Performance.</h1>
           <p>
             Your Leetify Rating, skill ratings, and recent results. One clear
             view.
@@ -97,6 +97,80 @@
         </div>
       </section>
 
+      <section class="friends-panel" aria-labelledby="scoreboard-title">
+        <span class="eyebrow">YOUR PROFILE · YOUR SQUAD</span>
+        <h2 id="scoreboard-title">Make it your scoreboard.</h2>
+        <p>
+          Save your Leetify profile and compare with your friends. Only you can
+          see this scoreboard.
+        </p>
+        <button class="primary" id="board-signin">
+          Sign in with Google to save your scoreboard
+        </button>
+        <form id="board-form" hidden>
+          <label
+            >Scoreboard name<input
+              id="board-name"
+              maxlength="60"
+              required
+              placeholder="Friday night squad"
+          /></label>
+          <label
+            >Your Leetify or Steam profile<input
+              id="board-mine"
+              maxlength="250"
+              required
+              placeholder="Paste your profile link"
+          /></label>
+          <p id="board-claim" role="status">
+            Profile ownership requires Steam verification below.
+          </p>
+          <label
+            >Friends’ profile links — one per line (up to 20)<textarea
+              id="board-friends"
+              rows="5"
+              maxlength="6000"
+              placeholder="https://leetify.com/app/profile/…"
+            ></textarea>
+          </label>
+          <label
+            >Rank by<select id="board-metric">
+              <option value="leetify">Leetify Rating</option>
+              <option value="aim">Aim</option>
+              <option value="positioning">Positioning</option>
+              <option value="utility">Utility</option>
+            </select></label
+          >
+          <div class="steam-actions">
+            <button class="primary" type="submit">Save scoreboard</button
+            ><button class="button" type="button" id="board-refresh">
+              Refresh ratings</button
+            ><button class="button" type="button" id="board-verify">
+              Verify my profile through Steam
+            </button>
+          </div>
+          <p>
+            Remove a friend’s line and save to remove them. Links and settings
+            are saved to your account. Ratings are fetched live and never saved.
+          </p>
+        </form>
+        <p id="board-status" role="status" aria-live="polite">
+          Sign in to create your private scoreboard.
+        </p>
+        <div class="friends-table-wrap">
+          <table class="friends-table" id="board-table" hidden>
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Player</th>
+                <th id="board-score-label">Leetify Rating</th>
+                <th>Profile</th>
+              </tr>
+            </thead>
+            <tbody id="board-rows"></tbody>
+          </table>
+        </div>
+      </section>
       <section class="friends-panel" aria-labelledby="friends-title">
         <div class="friends-heading">
           <div>
@@ -295,10 +369,20 @@
           CSKit is independent and is not endorsed by Leetify or Valve.<br />Results
           are fetched on request and are not stored by CSKit.
         </p>
-      <span class="footer-links"><a href="/about">About</a> · <a href="/privacy">Privacy</a> · <a href="https://github.com/DallenLarson/cs2-atelier/issues" target="_blank" rel="noreferrer">Feedback</a></span></footer>
+        <span class="footer-links"
+          ><a href="/about">About</a> · <a href="/privacy">Privacy</a> ·
+          <a
+            href="https://github.com/DallenLarson/cs2-atelier/issues"
+            target="_blank"
+            rel="noreferrer"
+            >Feedback</a
+          ></span
+        >
+      </footer>
     </main>
     <script type="module" src="/performance.js"></script>
     <script type="module" src="/friends.js"></script>
+    <script type="module" src="/scoreboard.js"></script>
     <script type="module" src="/shell.js"></script>
   </body>
 </html>

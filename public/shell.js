@@ -1,7 +1,7 @@
 const routes = [
   ["/dashboard", "Dashboard", "⌂"],
   ["/studio", "Studio", "⌘"],
-  ["/performance", "Performance", "▥"],
+  ["/performance", "Your Performance", "▥"],
   ["/improve", "Improve", "↗"],
   ["/experiments", "Experiments", "⇄"],
   ["/maps", "Maps", "◎"],

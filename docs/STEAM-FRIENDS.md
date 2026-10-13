@@ -2,7 +2,7 @@
 
 ## Current release status
 
-The friends panel and backend implementation are prepared and tested. **Production Steam linking is disabled** until the backend has been activated. The existing public Leetify lookup remains operational. No global leaderboard, arbitrary custom roster or historical/all-time ranking is included.
+The friends panel and backend implementation are prepared and tested. **Production Steam linking is disabled** until the backend has been activated. The existing public Leetify lookup remains operational. A private account-saved custom scoreboard supports your chosen profile and up to 20 friends entered by profile link. Only user-entered identifiers and settings are saved; ratings are fetched live. A selected profile is unverified until it matches a server-verified Steam identity. No global or historical/all-time ranking is included.
 
 ## User flow
 

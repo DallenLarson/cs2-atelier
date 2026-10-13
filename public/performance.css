@@ -547,3 +547,44 @@
     display: none;
   }
 }
+
+#board-form {
+  display: grid;
+  gap: 18px;
+  margin: 24px 0;
+}
+#board-form[hidden] {
+  display: none;
+}
+#board-form label {
+  display: grid;
+  gap: 8px;
+  font-size: 13px;
+}
+#board-form input,
+#board-form textarea,
+#board-form select {
+  width: 100%;
+  max-width: 650px;
+  box-sizing: border-box;
+  background: #101618;
+  color: #f4f7f5;
+  border: 1px solid #3b484b;
+  border-radius: 9px;
+  padding: 12px;
+  font: inherit;
+}
+#board-form textarea {
+  resize: vertical;
+}
+#board-form p,
+#board-status {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #b8c0c2;
+}
+#board-rows a {
+  text-decoration: underline;
+}
+
+#scoreboard-title { font-size:28px; letter-spacing:-.8px; margin:12px 0; }

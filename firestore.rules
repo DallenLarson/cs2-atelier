@@ -2,6 +2,17 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     function owner(uid) { return request.auth != null && request.auth.uid == uid; }
+    match /users/{uid}/private/scoreboard {
+      function validBoard() {
+        return request.resource.data.keys().hasOnly(['revision','payload'])
+          && request.resource.data.revision is int
+          && request.resource.data.payload is string
+          && request.resource.data.payload.size() <= 12000;
+      }
+      allow read, delete: if owner(uid);
+      allow create: if owner(uid) && validBoard() && request.resource.data.revision == 1;
+      allow update: if owner(uid) && validBoard() && request.resource.data.revision == resource.data.revision + 1;
+    }
     match /users/{uid}/private/workspace {
       function validWorkspace() {
         let d = request.resource.data;

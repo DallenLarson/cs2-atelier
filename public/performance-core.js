@@ -28,7 +28,7 @@ export function parsePlayer(input) {
     if (id && steam.test(id)) return { key: "steam64_id", value: id };
   }
   if (host === "leetify.com") {
-    id = url.pathname.match(/^\/app\/profile\/([^/]+)\/?$/)?.[1];
+    id = url.pathname.match(/^\/(?:app|public)\/profile\/([^/]+)\/?$/)?.[1];
     if (id && steam.test(id)) return { key: "steam64_id", value: id };
     if (id && uuid.test(id)) return { key: "id", value: id };
   }

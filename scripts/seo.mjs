@@ -31,7 +31,7 @@ export const pages = {
   ],
   "performance.html": [
     "/performance",
-    "CS2 Leetify Rating & Player Stats Lookup — CSKit",
+    "Your Performance & Friends Scoreboard — CSKit",
     "Look up available Leetify ratings, aim, positioning, utility and recent CS2 match results. See provider attribution and find your next practice focus.",
   ],
   "improve.html": [
