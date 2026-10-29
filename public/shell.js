@@ -12,7 +12,7 @@ const routes = [
   ["/updates", "Updates", "↻"],
 ];
 const nav = document.querySelector("aside nav");
-const route = location.pathname === "/" ? "/dashboard" : location.pathname;
+const route = location.pathname === "/" ? "/dashboard" : location.pathname.replace(/\.html$/, "");
 if (nav) {
   const marketControls = nav.querySelector("[data-view]")
     ? [...nav.querySelectorAll("[data-view]")]
@@ -119,3 +119,60 @@ if (header) {
     }
   });
 }
+
+// Mobile navigation uses the same destinations and state as the desktop shell.
+const mobileViewport = matchMedia("(max-width: 760px)");
+const mobileNav = document.createElement("nav");
+mobileNav.className = "mobile-tabs";
+mobileNav.setAttribute("aria-label", "Mobile navigation");
+const tabPaths = [
+  ["/dashboard", "Home", "M3 10 12 3l9 7v11h-6v-7H9v7H3Z"],
+  ["/market", "Market", "M3 7h18l-2 14H5L3 7Zm4 0V5a5 5 0 0 1 10 0v2"],
+  ["/studio", "Studio", "M4 7h16M4 17h16M9 3v8M15 13v8"],
+  ["/performance", "Stats", "M5 21V11M12 21V3M19 21V7"],
+];
+const glyph = (path) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${path}"/></svg>`;
+for (const [href, label, path] of tabPaths) {
+  const a = document.createElement("a");
+  a.href = href;
+  a.innerHTML = glyph(path) + `<span>${label}</span>`;
+  if (href === route) a.setAttribute("aria-current", "page");
+  mobileNav.append(a);
+}
+const moreTab = document.createElement("button");
+moreTab.type = "button";
+moreTab.innerHTML = glyph("M4 6h16M4 12h16M4 18h16") + "<span>More</span>";
+moreTab.setAttribute("aria-haspopup", "dialog");
+mobileNav.append(moreTab);
+document.body.append(mobileNav);
+const sheet = document.createElement("dialog");
+sheet.className = "mobile-sheet";
+sheet.setAttribute("aria-labelledby", "mobile-sheet-title");
+sheet.innerHTML = '<div class="mobile-sheet-heading"><div><small>YOUR COUNTER-STRIKE TOOLKIT</small><h2 id="mobile-sheet-title">Explore CSKit</h2></div><button type="button" aria-label="Close navigation">×</button></div><nav aria-label="All tools"></nav>';
+for (const [href, label, icon] of [...routes, ["/account", "Account & data", "○"]]) {
+  const a = document.createElement("a");
+  a.href = href;
+  a.innerHTML = `<span aria-hidden="true">${icon}</span><span>${label}</span><span aria-hidden="true">›</span>`;
+  if (href === route) a.setAttribute("aria-current", "page");
+  sheet.querySelector("nav").append(a);
+}
+document.body.append(sheet);
+const closeSheet = () => sheet.close();
+moreTab.onclick = () => sheet.showModal();
+sheet.querySelector("button").onclick = closeSheet;
+sheet.addEventListener("click", (event) => {
+  if (event.target.closest("a")) closeSheet();
+  if (event.target === sheet) {
+    const rect = sheet.getBoundingClientRect();
+    if (event.clientY < rect.top || event.clientX < rect.left || event.clientX > rect.right) closeSheet();
+  }
+});
+const resetMobile = () => {
+  if (!mobileViewport.matches && sheet.open) closeSheet();
+  if (mobileViewport.matches) {
+    document.body.classList.remove("nav-open");
+    document.querySelector(".shell-menu")?.setAttribute("aria-expanded", "false");
+  }
+};
+mobileViewport.addEventListener("change", resetMobile);
+resetMobile();
