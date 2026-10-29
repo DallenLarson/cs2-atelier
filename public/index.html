@@ -152,17 +152,42 @@
               <option value="popular">Most available</option>
               <option value="low">Price: low to high</option>
               <option value="high">Price: high to low</option>
+              <option value="name">Name: A–Z</option>
             </select>
           </div>
         </div>
-        <div class="filters" id="filters">
-          <button class="chip selected" data-category="all">All items</button
-          ><button class="chip" data-category="rifles">Rifles & snipers</button
-          ><button class="chip" data-category="knives">Knives</button
-          ><button class="chip" data-category="containers">
-            Cases & capsules
-          </button>
+        <div class="filters" id="filters" role="group" aria-label="Item types (select multiple)">
+          <button class="chip selected" data-category="all" data-label="All items" aria-pressed="true">All items</button>
+          <button class="chip" data-category="knives" data-label="Knives" aria-pressed="false">Knives</button>
+          <button class="chip" data-category="gloves" data-label="Gloves" aria-pressed="false">Gloves</button>
+          <button class="chip" data-category="agents" data-label="Agents" aria-pressed="false">Agents</button>
+          <button class="chip" data-category="rifles" data-label="Rifles & snipers" aria-pressed="false">Rifles & snipers</button>
+          <button class="chip" data-category="pistols" data-label="Pistols" aria-pressed="false">Pistols</button>
+          <button class="chip" data-category="smgs" data-label="SMGs" aria-pressed="false">SMGs</button>
+          <button class="chip" data-category="heavy" data-label="Heavy" aria-pressed="false">Heavy</button>
+          <button class="chip" data-category="stickers" data-label="Stickers & slabs" aria-pressed="false">Stickers & slabs</button>
+          <button class="chip" data-category="charms" data-label="Charms" aria-pressed="false">Charms</button>
+          <button class="chip" data-category="patches" data-label="Patches" aria-pressed="false">Patches</button>
+          <button class="chip" data-category="graffiti" data-label="Graffiti" aria-pressed="false">Graffiti</button>
+          <button class="chip" data-category="music" data-label="Music kits" aria-pressed="false">Music kits</button>
+          <button class="chip" data-category="containers" data-label="Cases & capsules" aria-pressed="false">Cases & capsules</button>
+          <button class="chip" data-category="keys" data-label="Keys" aria-pressed="false">Keys</button>
+          <button class="chip" data-category="tools" data-label="Tools & passes" aria-pressed="false">Tools & passes</button>
+          <button class="chip" data-category="other" data-label="Other" aria-pressed="false">Other</button>
         </div>
+        <fieldset class="market-options" id="market-options">
+          <legend>Refine your search</legend>
+          <label>Condition <select id="wear"><option value="all">Any condition</option><option>Factory New</option><option>Minimal Wear</option><option>Field-Tested</option><option>Well-Worn</option><option>Battle-Scarred</option></select></label>
+          <label>Edition <select id="tracking"><option value="all">Any edition</option><option value="normal">Standard only</option><option value="stattrak">StatTrak only</option><option value="souvenir">Souvenir only</option></select></label>
+          <label>Weapon / item type <input id="weapon" type="search" list="item-models" placeholder="e.g. Bowie Knife or AK-47"></label>
+          <label>Min USD <input id="min-price" type="number" min="0" step="0.01" placeholder="0"></label>
+          <label>Max USD <input id="max-price" type="number" min="0" step="0.01" placeholder="No limit"></label>
+          <label><input id="available-only" type="checkbox"> Priced listings only</label>
+          <label><input id="group-variants" type="checkbox" checked> Combine conditions &amp; StatTrak · show cheapest</label>
+          <button class="chip" id="reset-filters" type="button">Reset filters</button>
+          <p>Choose multiple item types, then narrow by condition, edition and budget. Combined rows show the cheapest matching variant; open one to compare conditions. Saves and targets use the exact variant. Souvenirs stay separate. Prices are Skinport USD snapshots.</p>
+        <datalist id="item-models"></datalist>
+        </fieldset>
         <div class="table-wrap">
           <table>
             <thead>

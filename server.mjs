@@ -1,3 +1,4 @@
+import { filterItems } from "./public/market-core.js";
 import http from "node:http";
 import {
   readFileSync,
@@ -134,52 +135,10 @@ const server = http.createServer(async (req, res) => {
         count: cache.items.length,
       });
     if (req.method === "GET" && url.pathname === "/api/items") {
-      const q = (url.searchParams.get("q") || "").toLowerCase(),
-        category = url.searchParams.get("category") || "all";
-      let items = cache.items.filter((i) =>
-        i.market_hash_name.toLowerCase().includes(q),
-      );
-      if (category === "wishlist")
-        items = state.wishlist
-          .map(
-            (w) =>
-              cache.items.find((i) => i.market_hash_name === w.name) || {
-                market_hash_name: w.name,
-                min_price: null,
-                quantity: 0,
-                item_page: "https://skinport.com/market",
-              },
-          )
-          .filter((i) => i.market_hash_name.toLowerCase().includes(q));
-      if (category === "knives")
-        items = items.filter(
-          (i) =>
-            /★/.test(i.market_hash_name) &&
-            !/Gloves|Wraps/.test(i.market_hash_name),
-        );
-      if (category === "rifles")
-        items = items.filter((i) =>
-          /^(StatTrak™ )?(AK-47|M4A|AWP|AUG|FAMAS|Galil|SG 553|SSG)/.test(
-            i.market_hash_name,
-          ),
-        );
-      if (category === "containers")
-        items = items.filter((i) =>
-          /Case|Capsule|Package/.test(i.market_hash_name),
-        );
-      const sort = url.searchParams.get("sort");
-      items.sort(
-        sort === "low"
-          ? (a, b) => (a.min_price ?? Infinity) - (b.min_price ?? Infinity)
-          : sort === "high"
-            ? (a, b) => (b.min_price ?? -1) - (a.min_price ?? -1)
-            : (a, b) => b.quantity - a.quantity,
-      );
+      const result = filterItems(cache.items, url.searchParams, state.wishlist);
       return send(res, 200, {
-        total: items.length,
-        items: items
-          .slice(0, Number(url.searchParams.get("limit")) || 100)
-          .map((i) => ({ ...i, ...artworkFor(i.market_hash_name) })),
+        ...result,
+        items: result.items.map((i) => ({ ...i, ...artworkFor(i.market_hash_name) })),
       });
     }
     if (req.method === "GET" && url.pathname === "/api/detail") {

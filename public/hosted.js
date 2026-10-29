@@ -1,3 +1,5 @@
+import { filterItems } from "./market-core.js";
+export { filterItems } from "./market-core.js";
 import { validateLibrary, validateWishlist } from "./account-core.js";
 
 export const hosted =
@@ -78,54 +80,6 @@ async function prices(force = false) {
     pending = null;
   });
   return pending;
-}
-export function filterItems(items, params, wishlist = []) {
-  const q = (params.get("q") || "").toLowerCase(),
-    category = params.get("category") || "all";
-  let result =
-    category === "wishlist"
-      ? wishlist.map(
-          (w) =>
-            items.find((i) => i.market_hash_name === w.name) || {
-              market_hash_name: w.name,
-              min_price: null,
-              quantity: 0,
-              item_page: "https://skinport.com/market",
-            },
-        )
-      : [...items];
-  result = result.filter((i) => i.market_hash_name.toLowerCase().includes(q));
-  if (category === "knives")
-    result = result.filter(
-      (i) =>
-        /★/.test(i.market_hash_name) &&
-        !/Gloves|Wraps/.test(i.market_hash_name),
-    );
-  if (category === "rifles")
-    result = result.filter((i) =>
-      /^(StatTrak™ )?(AK-47|M4A|AWP|AUG|FAMAS|Galil|SG 553|SSG)/.test(
-        i.market_hash_name,
-      ),
-    );
-  if (category === "containers")
-    result = result.filter((i) =>
-      /Case|Capsule|Package/.test(i.market_hash_name),
-    );
-  const sort = params.get("sort");
-  result.sort(
-    sort === "low"
-      ? (a, b) => (a.min_price ?? Infinity) - (b.min_price ?? Infinity)
-      : sort === "high"
-        ? (a, b) => (b.min_price ?? -1) - (a.min_price ?? -1)
-        : (a, b) => b.quantity - a.quantity,
-  );
-  return {
-    total: result.length,
-    items: result.slice(
-      0,
-      Math.max(1, Math.min(Number(params.get("limit")) || 100, 10000)),
-    ),
-  };
 }
 async function locked(kind, fn) {
   if (navigator.locks) return navigator.locks.request("cskit." + kind, fn);

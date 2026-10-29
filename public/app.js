@@ -62,7 +62,7 @@ async function sync() {
   try {
     state = await api("/api/state");
     $("#status").textContent = state.error
-      ? "Offline · saved prices"
+      ? "Delayed · saved prices"
       : state.busy
         ? "Updating prices"
         : state.updated
@@ -79,7 +79,9 @@ async function sync() {
       : "";
     $("#updated").textContent = state.updated
       ? "Last updated " +
-        new Date(state.updated).toLocaleTimeString([], {
+        new Date(state.updated).toLocaleString([], {
+          month: "short",
+          day: "numeric",
           hour: "2-digit",
           minute: "2-digit",
         })
@@ -126,21 +128,34 @@ async function render() {
           q: $("#search").value,
           category: view === "wishlist" ? "wishlist" : category,
           sort: $("#sort").value,
+          wear: $("#wear").value,
+          tracking: $("#tracking").value,
+          weapon: $("#weapon").value,
+          min: $("#min-price").value,
+          max: $("#max-price").value,
+          available: String($("#available-only").checked),
+          group: String($("#group-variants").checked),
           limit,
         }),
     );
     if (seq !== sequence) return;
     items = result.items;
+    document.querySelectorAll("[data-category]").forEach((button) => {
+      const key = button.dataset.category;
+      const count = key === "all" ? Object.values(result.categories || {}).reduce((a,b) => a+b,0) : result.categories?.[key] || 0;
+      button.textContent = `${button.dataset.label} (${count.toLocaleString()})`;
+    });
+    $("#item-models").innerHTML = (result.models || []).map(x => `<option value="${esc(x)}"></option>`).join("");
     $("#results-count").textContent =
       `${result.total.toLocaleString()} items · USD`;
     $("#items").innerHTML = items
       .map((i, n) => {
-        const name = names(i.market_hash_name),
+        const name = names(i.familyName || i.market_hash_name),
           w = wished(i.market_hash_name),
           [symbol, tone] = tile(i.market_hash_name),
           met =
             w?.target != null && i.min_price != null && i.min_price <= w.target;
-        return `<tr style="--rarity:${i.rarity || "#91a3bd"}"><td><button class="item" data-detail="${n}"><span class="item-tile ${tone}" aria-hidden="true">${i.image ? `<img class="item-art" src="${esc(i.image)}" alt="" loading="lazy" decoding="async" width="384" height="288"><span class="art-fallback" hidden>${esc(symbol)}</span>` : esc(symbol)}</span><span><span class="item-name">${esc(name.title)}</span><span class="item-meta">${esc(name.wear)}${i.market_hash_name.startsWith("StatTrak") ? " · StatTrak™" : ""}</span></span></button></td><td class="price"><span class="card-label">LOWEST LISTING</span>${money(i.min_price)}</td><td>${i.quantity.toLocaleString()} listings</td><td><button class="target ${met ? "met" : ""}" data-detail="${n}">${w?.target ? money(w.target) + (met ? " ✓" : "") : "Set target"}</button></td><td><button class="heart ${w ? "saved" : ""}" data-save="${n}" aria-label="${w ? "Remove from" : "Add to"} wishlist: ${esc(i.market_hash_name)}" aria-pressed="${!!w}">${w ? "♥" : "♡"}</button></td></tr>`;
+        return `<tr style="--rarity:${i.rarity || "#91a3bd"}"><td><button class="item" data-detail="${n}"><span class="item-tile ${tone}" aria-hidden="true">${i.image ? `<img class="item-art" src="${esc(i.image)}" alt="" loading="lazy" decoding="async" width="384" height="288"><span class="art-fallback" hidden>${esc(symbol)}</span>` : esc(symbol)}</span><span><span class="item-name">${esc(name.title)}</span><span class="item-meta">${i.variantCount ? `${i.variantCount} variants · cheapest: ${esc(names(i.market_hash_name).wear)}` : esc(name.wear)}${i.market_hash_name.includes("StatTrak™") ? " · StatTrak™" : ""}</span></span></button></td><td class="price"><span class="card-label">LOWEST LISTING</span>${i.variantCount ? "From " : ""}${money(i.min_price)}</td><td>${(i.groupQuantity ?? i.quantity).toLocaleString()} listings</td><td><button class="target ${met ? "met" : ""}" data-detail="${n}">${w?.target ? money(w.target) + (met ? " ✓" : "") : "Set target"}</button></td><td><button class="heart ${w ? "saved" : ""}" data-save="${n}" aria-label="${w ? "Remove from" : "Add to"} wishlist: ${esc(i.market_hash_name)}" aria-pressed="${!!w}">${w ? "♥" : "♡"}</button></td></tr>`;
       })
       .join("");
     $("#empty").hidden = !!items.length;
@@ -179,11 +194,28 @@ async function save(name, remove = false, target) {
     throw e;
   }
 }
-async function detail(item) {
+async function detail(item, variants = item.variants || []) {
   selected = item;
   const w = wished(item.market_hash_name);
   $("#detail-body").innerHTML =
     `${item.image ? `<div class="detail-stage" style="--rarity:${item.rarity}"><div class="stage-orbit"></div><img class="detail-art" src="${esc(item.imageLarge || (hosted ? item.image : item.image + "&size=large"))}" width="1024" height="768" alt="${esc(names(item.market_hash_name).title)}"><span class="stage-caption">${esc(names(item.market_hash_name).wear)}</span></div>` : ""}<div class="detail-kicker">${esc(names(item.market_hash_name).wear)} · Skinport</div><h2 class="detail-title">${esc(names(item.market_hash_name).title)}</h2><div class="detail-price">${money(item.min_price)}</div><div class="detail-muted">Lowest tradable listing · ${item.quantity.toLocaleString()} available</div><div id="history" class="detail-muted">Loading your local price history…</div><form class="target-form" id="target-form"><label for="target-input">Your target price (USD)</label><input id="target-input" type="number" min="0.01" step="0.01" placeholder="No target" value="${w?.target ?? ""}"><button class="primary" type="submit">Save to wishlist</button></form><p class="detail-muted">An empty target keeps the item on your wishlist without a price target.</p><div class="detail-actions"><a id="market-link" target="_blank" rel="noreferrer">View on Skinport</a>${w ? '<button id="remove-item" class="text-button">Remove from wishlist</button>' : ""}</div>`;
+  if (variants.length > 1) {
+    const label = document.createElement("label");
+    label.className = "variant-picker";
+    label.textContent = "Compare matching variants";
+    const select = document.createElement("select");
+    select.setAttribute("aria-label", "Item variant");
+    variants.forEach((variant, index) => {
+      const option = document.createElement("option");
+      option.value = String(index);
+      option.textContent = `${variant.market_hash_name} · ${money(variant.min_price)} · ${variant.quantity} listings`;
+      option.selected = variant.market_hash_name === item.market_hash_name;
+      select.append(option);
+    });
+    select.onchange = () => detail(variants[Number(select.value)], variants);
+    label.append(select);
+    $("#detail-body").prepend(label);
+  }
   const link = new URL(item.item_page);
   if (link.protocol === "https:" && link.hostname === "skinport.com")
     $("#market-link").href = link.href;
@@ -275,11 +307,18 @@ document.querySelectorAll("[data-view]").forEach(
 document.querySelectorAll("[data-category]").forEach(
   (b) =>
     (b.onclick = () => {
-      category = b.dataset.category;
+      const picked = new Set(category === "all" ? [] : category.split(","));
+      const key = b.dataset.category;
+      if (key === "all") picked.clear();
+      else if (picked.has(key)) picked.delete(key);
+      else picked.add(key);
+      category = [...picked].join(",") || "all";
       limit = 60;
-      document
-        .querySelectorAll("[data-category]")
-        .forEach((n) => n.classList.toggle("selected", n === b));
+      document.querySelectorAll("[data-category]").forEach((n) => {
+        const active = n.dataset.category === "all" ? !picked.size : picked.has(n.dataset.category);
+        n.classList.toggle("selected", active);
+        n.setAttribute("aria-pressed", String(active));
+      });
       render();
     }),
 );
@@ -292,6 +331,22 @@ $("#search").oninput = () => {
   }, 180);
 };
 $("#sort").onchange = () => render();
+for (const id of ["wear", "tracking", "weapon", "min-price", "max-price", "available-only", "group-variants"]) {
+  $("#" + id).oninput = () => {
+    clearTimeout(debounce);
+    debounce = setTimeout(() => { limit = 60; render(); }, 180);
+  };
+}
+$("#reset-filters").onclick = () => {
+  for (const id of ["wear", "tracking"]) $("#" + id).value = "all";
+  for (const id of ["weapon", "min-price", "max-price", "search"]) $("#" + id).value = "";
+  $("#available-only").checked = false;
+  $("#group-variants").checked = true;
+  category = "all";
+  document.querySelectorAll("[data-category]").forEach((el) => { el.classList.toggle("selected", el.dataset.category === "all"); el.setAttribute("aria-pressed", String(el.dataset.category === "all")); });
+  limit = 60;
+  render();
+};
 $("#more").onclick = () => {
   limit += 100;
   render();
