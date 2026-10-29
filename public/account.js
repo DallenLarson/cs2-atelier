@@ -1,3 +1,4 @@
+import { filterItems } from "./market-core.js";
 import { hosted, hostedRequest } from "./hosted.js";
 import { freshWorkspace, validateWorkspace } from "./workspace-core.js";
 import {
@@ -194,23 +195,9 @@ export async function request(url, body) {
     const quotes = await localRequest("/api/quotes", {
       names: saved.wishlist.map((w) => w.name),
     });
-    const q = (parsed.searchParams.get("q") || "").toLowerCase();
-    const items = quotes.items.filter((i) =>
-        i.market_hash_name.toLowerCase().includes(q),
-      ),
-      sort = parsed.searchParams.get("sort");
-    items.sort(
-      sort === "low"
-        ? (a, b) => (a.min_price ?? Infinity) - (b.min_price ?? Infinity)
-        : sort === "high"
-          ? (a, b) => (b.min_price ?? -1) - (a.min_price ?? -1)
-          : (a, b) => b.quantity - a.quantity,
-    );
-    return {
-      total: items.length,
-      items: items.slice(0, Number(parsed.searchParams.get("limit")) || 100),
-    };
+    return filterItems(quotes.items, parsed.searchParams, saved.wishlist);
   }
+
   if (kind === "/api/export") {
     const [wishlist, studio] = await Promise.all([
       read("wishlist"),

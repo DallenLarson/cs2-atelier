@@ -62,7 +62,7 @@ async function sync() {
   try {
     state = await api("/api/state");
     $("#status").textContent = state.error
-      ? "Offline · saved prices"
+      ? "Delayed · saved prices"
       : state.busy
         ? "Updating prices"
         : state.updated
@@ -79,7 +79,9 @@ async function sync() {
       : "";
     $("#updated").textContent = state.updated
       ? "Last updated " +
-        new Date(state.updated).toLocaleTimeString([], {
+        new Date(state.updated).toLocaleString([], {
+          month: "short",
+          day: "numeric",
           hour: "2-digit",
           minute: "2-digit",
         })
@@ -126,6 +128,13 @@ async function render() {
           q: $("#search").value,
           category: view === "wishlist" ? "wishlist" : category,
           sort: $("#sort").value,
+          wear: $("#wear").value,
+          tracking: $("#tracking").value,
+          weapon: $("#weapon").value,
+          min: $("#min-price").value,
+          max: $("#max-price").value,
+          available: String($("#available-only").checked),
+          group: String($("#group-variants").checked),
           limit,
         }),
     );
@@ -140,7 +149,7 @@ async function render() {
           [symbol, tone] = tile(i.market_hash_name),
           met =
             w?.target != null && i.min_price != null && i.min_price <= w.target;
-        return `<tr style="--rarity:${i.rarity || "#91a3bd"}"><td><button class="item" data-detail="${n}"><span class="item-tile ${tone}" aria-hidden="true">${i.image ? `<img class="item-art" src="${esc(i.image)}" alt="" loading="lazy" decoding="async" width="384" height="288"><span class="art-fallback" hidden>${esc(symbol)}</span>` : esc(symbol)}</span><span><span class="item-name">${esc(name.title)}</span><span class="item-meta">${esc(name.wear)}${i.market_hash_name.startsWith("StatTrak") ? " · StatTrak™" : ""}</span></span></button></td><td class="price"><span class="card-label">LOWEST LISTING</span>${money(i.min_price)}</td><td>${i.quantity.toLocaleString()} listings</td><td><button class="target ${met ? "met" : ""}" data-detail="${n}">${w?.target ? money(w.target) + (met ? " ✓" : "") : "Set target"}</button></td><td><button class="heart ${w ? "saved" : ""}" data-save="${n}" aria-label="${w ? "Remove from" : "Add to"} wishlist: ${esc(i.market_hash_name)}" aria-pressed="${!!w}">${w ? "♥" : "♡"}</button></td></tr>`;
+        return `<tr style="--rarity:${i.rarity || "#91a3bd"}"><td><button class="item" data-detail="${n}"><span class="item-tile ${tone}" aria-hidden="true">${i.image ? `<img class="item-art" src="${esc(i.image)}" alt="" loading="lazy" decoding="async" width="384" height="288"><span class="art-fallback" hidden>${esc(symbol)}</span>` : esc(symbol)}</span><span><span class="item-name">${esc(name.title)}</span><span class="item-meta">${esc(name.wear)}${i.variantCount ? ` · Cheapest of ${i.variantCount} variants` : ""}${i.market_hash_name.startsWith("StatTrak") ? " · StatTrak™" : ""}</span></span></button></td><td class="price"><span class="card-label">LOWEST LISTING</span>${money(i.min_price)}</td><td>${i.quantity.toLocaleString()} listings</td><td><button class="target ${met ? "met" : ""}" data-detail="${n}">${w?.target ? money(w.target) + (met ? " ✓" : "") : "Set target"}</button></td><td><button class="heart ${w ? "saved" : ""}" data-save="${n}" aria-label="${w ? "Remove from" : "Add to"} wishlist: ${esc(i.market_hash_name)}" aria-pressed="${!!w}">${w ? "♥" : "♡"}</button></td></tr>`;
       })
       .join("");
     $("#empty").hidden = !!items.length;
@@ -292,6 +301,21 @@ $("#search").oninput = () => {
   }, 180);
 };
 $("#sort").onchange = () => render();
+for (const id of ["wear", "tracking", "weapon", "min-price", "max-price", "available-only", "group-variants"]) {
+  $("#" + id).oninput = () => {
+    clearTimeout(debounce);
+    debounce = setTimeout(() => { limit = 60; render(); }, 180);
+  };
+}
+$("#reset-filters").onclick = () => {
+  for (const id of ["wear", "tracking"]) $("#" + id).value = "all";
+  for (const id of ["weapon", "min-price", "max-price", "search"]) $("#" + id).value = "";
+  for (const id of ["available-only", "group-variants"]) $("#" + id).checked = false;
+  category = "all";
+  document.querySelectorAll("[data-category]").forEach((el) => el.classList.toggle("selected", el.dataset.category === "all"));
+  limit = 60;
+  render();
+};
 $("#more").onclick = () => {
   limit += 100;
   render();

@@ -162,7 +162,19 @@
           ><button class="chip" data-category="containers">
             Cases & capsules
           </button>
-        </div>
+<button class="chip" data-category="gloves">Gloves</button><button class="chip" data-category="pistols">Pistols</button><button class="chip" data-category="smgs">SMGs</button><button class="chip" data-category="heavy">Heavy</button><button class="chip" data-category="stickers">Stickers</button>        </div>
+        <fieldset class="market-options" id="market-options">
+          <legend>Refine your search</legend>
+          <label>Condition <select id="wear"><option value="all">Any condition</option><option>Factory New</option><option>Minimal Wear</option><option>Field-Tested</option><option>Well-Worn</option><option>Battle-Scarred</option></select></label>
+          <label>Edition <select id="tracking"><option value="all">Any edition</option><option value="normal">Standard only</option><option value="stattrak">StatTrak only</option><option value="souvenir">Souvenir only</option></select></label>
+          <label>Weapon / item type <input id="weapon" type="search" placeholder="e.g. Bowie Knife or AK-47"></label>
+          <label>Min USD <input id="min-price" type="number" min="0" step="0.01" placeholder="0"></label>
+          <label>Max USD <input id="max-price" type="number" min="0" step="0.01" placeholder="No limit"></label>
+          <label><input id="available-only" type="checkbox"> Priced listings only</label>
+          <label><input id="group-variants" type="checkbox"> Combine conditions &amp; StatTrak · show cheapest</label>
+          <button class="chip" id="reset-filters" type="button">Reset filters</button>
+          <p>Combined rows show the cheapest available matching variant. Details, saves and targets use that exact variant. Souvenirs stay separate. Prices are Skinport USD snapshots.</p>
+        </fieldset>
         <div class="table-wrap">
           <table>
             <thead>

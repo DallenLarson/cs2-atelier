@@ -34,6 +34,7 @@ test("Studio API persists across restart, rejects invalid writes and stale revis
       "server.mjs",
       "artwork.mjs",
       "public/studio-core.js",
+      "public/market-core.js",
       "package.json",
     ])
       await copyFile(
