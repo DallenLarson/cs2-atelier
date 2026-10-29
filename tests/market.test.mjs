@@ -33,3 +33,34 @@ test('wishlist stays exact and source data is not mutated', () => {
  assert.equal(r.total,2);
  assert.equal(JSON.stringify(items),before);
 });
+
+test('categories can be combined without confusing stickers and agents or case keys and containers', async () => {
+ const {itemType} = await import('../public/market-core.js');
+ const samples = [
+ ['★ Sport Gloves | Vice (Field-Tested)', 'gloves'],
+ ['Special Agent Ava | FBI', 'agents'],
+ ['Sir Bloody Miami Darryl | The Professionals', 'agents'],
+ ['Sticker | FBI (Holo)', 'stickers'],
+ ['Patch | Phoenix', 'patches'],
+ ['Prisma Case Key', 'keys'],
+ ['Prisma Case', 'containers'],
+ ['Sealed Graffiti | Test (Brick Red)', 'graffiti'],
+ ['StatTrak™ Music Kit | Test', 'music'],
+ ['Souvenir Charm | Test', 'charms'],
+ ['G3SG1 | Test (Factory New)', 'rifles'],
+ ];
+ for (const [name, expected] of samples) assert.equal(itemType(name), expected, name);
+ const catalog = samples.map(([name]) => item(name,10));
+ const result = filterItems(catalog,new URLSearchParams('category=gloves,agents&group=true'));
+ assert.equal(result.total,3);
+ assert.equal(result.categories.agents,2);
+ assert.equal(result.categories.stickers,1);
+});
+test('search accepts unordered words and grouping retains comparable variants and total listings', () => {
+ const result = run('q=doppler+bowie&group=true');
+ assert.equal(result.total,1);
+ assert.equal(result.items[0].variants.length,3);
+ assert.equal(result.items[0].groupQuantity,6);
+ assert.equal(result.items[0].familyName,'★ Bowie Knife | Gamma Doppler');
+ assert.equal(result.items[0].variants[0].min_price,150);
+});
